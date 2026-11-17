@@ -42,6 +42,18 @@ galerie:
     alt:
       de: "Blick über Madrid bei Sonnenuntergang, in der Mitte das Stadion"
       en: "View over Madrid at sunset with the stadium in the centre"
+  - bild: ../../assets/projekte/nfl-europa/set-6.jpg
+    alt:
+      de: "Großes Schild „Berlin Game 2025“ im Stadion"
+      en: "Large “Berlin Game 2025” sign inside the stadium"
+  - bild: ../../assets/projekte/nfl-europa/set-7.jpg
+    alt:
+      de: "Roland Possler mit Schulterkamera beim Madrid Game"
+      en: "Roland Possler with a shoulder camera at the Madrid Game"
+  - bild: ../../assets/projekte/nfl-europa/set-8.jpg
+    alt:
+      de: "Das Bernabéu von innen mit geschlossenem Dach vor dem Spiel"
+      en: "Inside the Bernabéu with the roof closed before the game"
 highlight: true
 reihenfolge: 2
 ---

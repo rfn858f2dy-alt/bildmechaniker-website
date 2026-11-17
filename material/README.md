@@ -10,3 +10,8 @@ Alle Dateien sind ohne Metadaten (kein GPS-Ort, kein Gerät).
 | `unzugeordnet/qualifiers-gimbal-am-spielfeld.jpg` | Gimbal-Kamera am Spielfeldrand, Weste „European Qualifiers“, Länderspiel | Eigenes Projekt oder Nations League zu „Länderspiele“ erweitern? |
 | `unzugeordnet/walk-talk-grafik.jpg` | Grafik „Walk / Talk“ mit Ampelmännchen | Wofür? Formatidee, Leistung, Projekt? |
 | `clips-hochkant/` | Formel 1 Monza: Red-Bull-Box und Ferrari-Boxenstopp im Hochformat (ohne GPS) | Für Reels/Social oder Projekt Formel 1 |
+| `unzugeordnet/qualifiers-windsor-park-gimbal.jpg` | Gimbal am Spielfeldrand, Windsor Park Belfast, Aufwärmen | Länderspiel-Projekt (mit Qualifiers-Foto) |
+| `unzugeordnet/bundesliga-sinsheim-mittellinie.jpg` | Mittellinie in Sinsheim, Schuhe im Bild | Bundesliga-Projekt? |
+| `unzugeordnet/oktagon-mma-arena.jpg` | Oktagon MMA, Arena mit Lichtshow | Neues Projekt Kampfsport? |
+| `unzugeordnet/equipment-fx9-bildmechaniker.jpg`, `equipment-fx9-detail.jpg` | Sony FX9 mit Bildmechaniker-Aufklebern | Für die Seite Leistungen/Equipment |
+| `unzugeordnet/winter-cortina-kapelle.jpg` | Verschneite Kapelle vor Dolomiten (Cortina?) | Bob & Skeleton? |

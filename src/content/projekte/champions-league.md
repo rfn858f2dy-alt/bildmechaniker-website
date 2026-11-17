@@ -23,8 +23,9 @@ kategorien: ["sport"]
 equipment: ["Sony FX6","DJI Ronin","DTC Domo Live"]
 poster: ../../assets/projekte/champions-league/poster.jpg
 posterAlt:
-  de: "Flutlicht im voll besetzten Stadion kurz vor Anpfiff, Blick vom Spielfeldrand"
-  en: "Floodlit, sold-out stadium just before kick-off, seen from the touchline"
+  de: "Mobile Kamera auf dem Gimbal mit Funkmonitor im Parc des Princes vor Anpfiff"
+  en: "Gimbal-mounted mobile camera with wireless monitor at the Parc des Princes before kick-off"
+vorschau: /media/projekte/champions-league/vorschau.mp4   # Ausschnitt TV-Signal Finale 2025 – nur mit Freigabe des Rechteinhabers
 galerie:
   - bild: ../../assets/projekte/champions-league/set-1.jpg
     alt:
@@ -38,6 +39,30 @@ galerie:
     alt:
       de: "Am Moderationsplatz am Spielfeld: gemeinsamer Blick auf den Kameramonitor"
       en: "At the pitchside presentation desk, looking at the camera monitor together"
+  - bild: ../../assets/projekte/champions-league/set-4.jpg
+    alt:
+      de: "Leeres Stadion Parc des Princes am Nachmittag vor dem Spiel"
+      en: "The empty Parc des Princes in the afternoon before the match"
+  - bild: ../../assets/projekte/champions-league/set-5.jpg
+    alt:
+      de: "Flutlicht im voll besetzten Stadion kurz vor Anpfiff"
+      en: "Floodlit, sold-out stadium just before kick-off"
+  - bild: ../../assets/projekte/champions-league/set-6.jpg
+    alt:
+      de: "Das leere Parc des Princes am Nachmittag vor dem Spiel"
+      en: "The empty Parc des Princes in the afternoon before the match"
+  - bild: ../../assets/projekte/champions-league/set-7.jpg
+    alt:
+      de: "Flutlicht im voll besetzten Stadion kurz vor Anpfiff"
+      en: "Floodlit, sold-out stadium just before kick-off"
+  - bild: ../../assets/projekte/champions-league/set-8.jpg
+    alt:
+      de: "Interview-Mikrofon mit Champions-League-Logo vor dem BVB-Wappen"
+      en: "Interview microphone with Champions League logo in front of the BVB crest"
+  - bild: ../../assets/projekte/champions-league/set-9.jpg
+    alt:
+      de: "Eckfahne im Signal Iduna Park bei Flutlicht"
+      en: "Corner flag at Signal Iduna Park under floodlights"
 highlight: true
 reihenfolge: 1
 ---
