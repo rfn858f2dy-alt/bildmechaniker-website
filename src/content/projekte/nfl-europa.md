@@ -38,6 +38,10 @@ galerie:
     alt:
       de: "Kamera-Rig auf dem Gimbal mit Funkmonitor, bereit am Moderationsplatz"
       en: "Gimbal camera rig with wireless monitor, ready at the presentation desk"
+  - bild: ../../assets/projekte/nfl-europa/set-5.jpg
+    alt:
+      de: "Blick über Madrid bei Sonnenuntergang, in der Mitte das Stadion"
+      en: "View over Madrid at sunset with the stadium in the centre"
 highlight: true
 reihenfolge: 2
 ---

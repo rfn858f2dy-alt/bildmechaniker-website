@@ -19,26 +19,13 @@ kategorien: ["tv"]
 equipment: []
 poster: ../../assets/projekte/bauer-sucht-frau/poster.jpg
 posterAlt:
-  de: "Platzhalter-Standbild Bauer sucht Frau"
-  en: "Placeholder still Bauer sucht Frau"
-vorschau: /media/projekte/bauer-sucht-frau/vorschau.mp4
-video:
-  typ: datei
-  src: /media/projekte/bauer-sucht-frau/film-1080.mp4
-  srcMobil: /media/projekte/bauer-sucht-frau/film-720.mp4
+  de: "Luftaufnahme: Ein Traktor zieht ein großes Herz in ein grünes Feld"
+  en: "Aerial shot: a tractor draws a large heart into a green field"
 galerie:
   - bild: ../../assets/projekte/bauer-sucht-frau/set-1.jpg
     alt:
-      de: "Platzhalter Set-Foto 1"
-      en: "Placeholder set photo 1"
-  - bild: ../../assets/projekte/bauer-sucht-frau/set-2.jpg
-    alt:
-      de: "Platzhalter Set-Foto 2"
-      en: "Placeholder set photo 2"
-  - bild: ../../assets/projekte/bauer-sucht-frau/set-3.jpg
-    alt:
-      de: "Platzhalter Set-Foto 3"
-      en: "Placeholder set photo 3"
+      de: "Weizenähren im Gegenlicht der untergehenden Sonne"
+      en: "Ears of wheat backlit by the setting sun"
 highlight: true
 reihenfolge: 3
 ---
