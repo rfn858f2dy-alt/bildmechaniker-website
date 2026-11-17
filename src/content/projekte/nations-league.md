@@ -26,6 +26,10 @@ galerie:
     alt:
       de: "Mobile Kamera beim Aufwärmen der Mannschaften vor vollen Rängen"
       en: "Mobile camera during the warm-up in front of packed stands"
+  - bild: ../../assets/projekte/nations-league/set-2.jpg
+    alt:
+      de: "Gut gelaunt am Spielfeldrand mit der mobilen Kamera"
+      en: "In good spirits on the touchline with the mobile camera"
 highlight: false
 reihenfolge: 3
 ---

@@ -30,6 +30,14 @@ galerie:
     alt:
       de: "Sony FX6 mit Funkmonitor am Spielfeldrand, im Hintergrund eine Live-Schalte"
       en: "Sony FX6 with wireless monitor on the touchline, a live interview in the background"
+  - bild: ../../assets/projekte/champions-league/set-2.jpg
+    alt:
+      de: "Kameramann mit mobiler Kamera auf dem Gimbal am Spielfeldrand vor voll besetzten Rängen"
+      en: "Camera operator with a gimbal-mounted mobile camera on the touchline in front of packed stands"
+  - bild: ../../assets/projekte/champions-league/set-3.jpg
+    alt:
+      de: "Am Moderationsplatz am Spielfeld: gemeinsamer Blick auf den Kameramonitor"
+      en: "At the pitchside presentation desk, looking at the camera monitor together"
 highlight: true
 reihenfolge: 1
 ---
