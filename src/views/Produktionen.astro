@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectGrid from '../components/portfolio/ProjectGrid.astro';
+import { getProjekte } from '../lib/projekte';
+import { useT, routes, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useT(lang);
+const projekte = await getProjekte();
+---
+
+<Base lang={lang} title={`${t('portfolio.titel')} – Bildmechaniker`} description={t('portfolio.intro')} alternate={routes.produktionen}>
+  <div class="wrap">
+    <header class="intro">
+      <p class="eyebrow">Bildmechaniker</p>
+      <h1>{t('portfolio.titel')}</h1>
+      <p class="lead">{t('portfolio.intro')}</p>
+    </header>
+    <ProjectGrid projekte={projekte} lang={lang} stufe={2} />
+  </div>
+</Base>
+
+<style>
+  .intro { padding: clamp(3rem, 8vw, 6rem) 0 clamp(2rem, 4vw, 3rem); max-width: 48rem; }
+  h1 { font-size: var(--fs-h1); margin-top: 0.75rem; animation: rise 0.9s var(--ease) both; }
+  .lead { color: var(--muted); font-size: clamp(1.05rem, 1rem + 0.4vw, 1.3rem); margin: 1rem 0 0; }
+  @keyframes rise { from { opacity: 0; transform: translateY(16px); } }
+</style>

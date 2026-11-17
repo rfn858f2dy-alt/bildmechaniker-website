@@ -1,0 +1,222 @@
+---
+import logo from '../assets/logo/bildmechaniker-quer-dunkel.svg?raw';
+import { useT, routes, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  alternate: { de: string; en: string };
+  transparent?: boolean;
+}
+const { lang, alternate, transparent = false } = Astro.props;
+const t = useT(lang);
+const path = Astro.url.pathname;
+const links = [
+  { href: routes.produktionen[lang], label: t('nav.produktionen') },
+  { href: routes.leistungen[lang], label: t('nav.leistungen') },
+  { href: routes.ueber[lang], label: t('nav.ueber') },
+  { href: routes.kontakt[lang], label: t('nav.kontakt') },
+];
+const other = lang === 'de' ? 'en' : 'de';
+---
+
+<header class:list={['site-header', { 'is-transparent': transparent }]} data-header>
+  <div class="bar wrap">
+    <a class="logo" href={routes.home[lang]} aria-label="Bildmechaniker – Start">
+      <Fragment set:html={logo} />
+    </a>
+
+    <nav class="nav" id="hauptmenue" aria-label={lang === 'de' ? 'Hauptmenü' : 'Main menu'}>
+      <ul>
+        {
+          links.map((l) => (
+            <li>
+              <a href={l.href} aria-current={path.startsWith(l.href) ? 'page' : undefined}>
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="lang" href={alternate[other]} hreflang={other} lang={other}>
+        <span aria-hidden="true">{other.toUpperCase()}</span>
+        <span class="visually-hidden">{other === 'en' ? 'English' : 'Deutsch'}</span>
+      </a>
+    </nav>
+
+    <button class="menu-btn" type="button" aria-controls="hauptmenue" aria-expanded="false" data-menu-btn>
+      <span class="visually-hidden" data-open-label={t('nav.menu')} data-close-label={t('nav.close')}>{t('nav.menu')}</span>
+      <span class="burger" aria-hidden="true"><span></span><span></span></span>
+    </button>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]')!;
+  const btn = header.querySelector<HTMLButtonElement>('[data-menu-btn]')!;
+  const label = btn.querySelector<HTMLElement>('.visually-hidden')!;
+
+  // Kopfzeile: beim Scrollen mit Hintergrund, beim Herunterscrollen ausblenden
+  let lastY = scrollY;
+  const onScroll = () => {
+    const y = scrollY;
+    header.classList.toggle('is-scrolled', y > 40);
+    header.classList.toggle('is-hidden', y > lastY && y > 300 && !header.classList.contains('is-open'));
+    lastY = y;
+  };
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Mobiles Menü
+  const setOpen = (open: boolean) => {
+    header.classList.toggle('is-open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    label.textContent = open ? label.dataset.closeLabel! : label.dataset.openLabel!;
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+  };
+  btn.addEventListener('click', () => setOpen(!header.classList.contains('is-open')));
+  addEventListener('keydown', (e) => e.key === 'Escape' && header.classList.contains('is-open') && (setOpen(false), btn.focus()));
+  matchMedia('(min-width: 860px)').addEventListener('change', () => setOpen(false));
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: var(--header-h);
+    background: rgb(11 12 14 / 0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid transparent;
+    transition: transform 0.45s var(--ease), background 0.3s, border-color 0.3s;
+  }
+  .site-header.is-transparent {
+    position: fixed;
+    inset: 0 0 auto;
+    background: linear-gradient(rgb(0 0 0 / 0.5), transparent);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .site-header.is-scrolled {
+    background: rgb(11 12 14 / 0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom-color: var(--line);
+  }
+  .site-header.is-hidden {
+    transform: translateY(-100%);
+  }
+  .bar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+  .logo {
+    display: block;
+    width: clamp(10.5rem, 8rem + 6vw, 13.5rem);
+    position: relative;
+    z-index: 2;
+  }
+  .logo :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+  }
+  .nav ul {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav a {
+    text-decoration: none;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+    transition: color 0.2s;
+    padding-block: 0.5rem;
+  }
+  .nav a:hover,
+  .nav a[aria-current='page'] {
+    color: var(--text);
+  }
+  .nav .lang {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.25rem 0.7rem;
+    font-size: var(--fs-meta);
+  }
+  .menu-btn {
+    display: none;
+    position: relative;
+    z-index: 2;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 0;
+    background: none;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .burger {
+    display: grid;
+    gap: 7px;
+    justify-items: end;
+  }
+  .burger span {
+    display: block;
+    width: 26px;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform 0.35s var(--ease), width 0.35s var(--ease);
+  }
+  .burger span:last-child {
+    width: 18px;
+  }
+  .is-open .burger span:first-child {
+    transform: translateY(4.25px) rotate(45deg);
+  }
+  .is-open .burger span:last-child {
+    width: 26px;
+    transform: translateY(-4.25px) rotate(-45deg);
+  }
+
+  @media (max-width: 859px) {
+    .menu-btn {
+      display: block;
+    }
+    .nav {
+      position: fixed;
+      inset: 0;
+      height: 100dvh;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: var(--header-h) var(--gutter) 2rem;
+      background: var(--bg);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.35s var(--ease), visibility 0.35s;
+    }
+    .is-open .nav {
+      opacity: 1;
+      visibility: visible;
+    }
+    .nav ul {
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .nav ul a {
+      font-size: clamp(2rem, 9vw, 3rem);
+      color: var(--text);
+      font-weight: 400;
+    }
+  }
+</style>

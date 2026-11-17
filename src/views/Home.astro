@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import Showreel from '../components/Showreel.astro';
+import ProjectGrid from '../components/portfolio/ProjectGrid.astro';
+import { getProjekte } from '../lib/projekte';
+import { useT, routes, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useT(lang);
+const alle = await getProjekte();
+const highlights = (alle.filter((p) => p.data.highlight).length ? alle.filter((p) => p.data.highlight) : alle).slice(0, 6);
+---
+
+<Base
+  lang={lang}
+  title={lang === 'de' ? 'Bildmechaniker – Mobile Kamera & Live-Bildfunk' : 'Bildmechaniker – Mobile camera & live wireless video'}
+  description={t('hero.sub')}
+  alternate={routes.home}
+  transparentHeader>
+  <Showreel lang={lang} />
+
+  <section class="wrap auswahl" id="auswahl">
+    <header class="head reveal">
+      <h2>{t('home.auswahl')}</h2>
+      <a class="more" href={routes.produktionen[lang]}>{t('home.alle')} <span aria-hidden="true">→</span></a>
+    </header>
+    <ProjectGrid projekte={highlights} lang={lang} filter={false} akzentAlle={0} />
+  </section>
+</Base>
+
+<style>
+  .auswahl { padding-top: clamp(4rem, 9vw, 7rem); }
+  .head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 1.75rem; }
+  .head h2 { font-size: var(--fs-h2); }
+  .more { color: var(--muted); text-decoration: none; white-space: nowrap; }
+  .more:hover { color: var(--text); }
+</style>

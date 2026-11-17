@@ -1,0 +1,14 @@
+---
+import ProjektView from '../../../views/Projekt.astro';
+import { getProjekte } from '../../../lib/projekte';
+
+export async function getStaticPaths() {
+  const liste = await getProjekte();
+  return liste.map((projekt, i) => ({
+    params: { slug: projekt.id },
+    props: { projekt, vorher: liste[i - 1], weiter: liste[i + 1] },
+  }));
+}
+const { projekt, vorher, weiter } = Astro.props;
+---
+<ProjektView lang="en" projekt={projekt} vorher={vorher} weiter={weiter} />

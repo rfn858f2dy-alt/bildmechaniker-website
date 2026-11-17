@@ -1,0 +1,19 @@
+{
+  "name": "bildmechaniker-website",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "projekt:neu": "node scripts/projekt-neu.mjs",
+    "showreel": "node scripts/showreel.mjs",
+    "platzhalter": "node scripts/platzhalter.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/outfit": "5.2.8",
+    "astro": "5.18.2",
+    "sharp": "0.34.5"
+  }
+}

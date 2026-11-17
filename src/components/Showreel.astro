@@ -1,0 +1,270 @@
+---
+/**
+ * Großes Showreel im Hero.
+ * Ladeverhalten:
+ *  1. Sofort sichtbar ist nur das optimierte Standbild (AVIF/WebP, vorgeladen).
+ *  2. Der stumme Loop wird erst geladen, wenn die Seite fertig ist und der Browser Zeit hat.
+ *     Bei „Bewegung reduzieren“, Datensparmodus oder langsamer Verbindung bleibt es beim Standbild.
+ *  3. Das ganze Showreel mit Ton lädt erst, wenn jemand auf „Showreel ansehen“ klickt.
+ */
+import { Picture, getImage } from 'astro:assets';
+import { showreel } from '../data/showreel';
+import { useT, routes, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const film = showreel.film;
+const filmPoster = await getImage({ src: showreel.poster, width: 1920, format: 'webp' });
+---
+
+<section class="hero" data-showreel aria-label={lang === 'de' ? 'Showreel' : 'Showreel'}>
+  <div class="hero__media">
+    <Picture
+      src={showreel.poster}
+      alt=""
+      formats={['avif', 'webp']}
+      widths={[640, 960, 1280, 1920, 2560]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+      class="hero__poster"
+    />
+    <video
+      class="hero__video"
+      muted
+      loop
+      playsinline
+      preload="none"
+      aria-hidden="true"
+      tabindex="-1"
+      disablepictureinpicture
+      data-src-mobil={showreel.loop.mobil}
+      data-src-desktop={showreel.loop.desktop}></video>
+  </div>
+
+  <div class="hero__content wrap">
+    <h1 class="hero__claim">{t('hero.claim')}</h1>
+    <p class="hero__sub">{t('hero.sub')}</p>
+    <div class="hero__actions">
+      {
+        film && (
+          <button
+            type="button"
+            class="btn btn--primary"
+            data-lightbox
+            data-title="Bildmechaniker Showreel"
+            data-poster={filmPoster.src}
+            {...(film.typ === 'youtube'
+              ? { 'data-youtube': film.id }
+              : { 'data-video-src': film.src, 'data-video-src-mobil': film.srcMobil })}>
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor" /></svg>
+            {t('hero.play')}
+          </button>
+        )
+      }
+      <a class="btn" href={routes.produktionen[lang]}>{t('hero.cta')}</a>
+    </div>
+  </div>
+
+  <button class="hero__pause" type="button" data-pause hidden aria-pressed="false">
+    <span class="visually-hidden" data-label-pause={lang === 'de' ? 'Hintergrundvideo anhalten' : 'Pause background video'} data-label-play={lang === 'de' ? 'Hintergrundvideo abspielen' : 'Play background video'}
+      >{lang === 'de' ? 'Hintergrundvideo anhalten' : 'Pause background video'}</span
+    >
+    <svg class="i-pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 5h3v14H7zM14 5h3v14h-3z" fill="currentColor" /></svg>
+    <svg class="i-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor" /></svg>
+  </button>
+
+  <a class="hero__scroll" href="#auswahl" aria-label={t('home.auswahl')}><span></span></a>
+</section>
+
+<script>
+  import { previewsErlaubt } from '../scripts/portfolio';
+
+  const root = document.querySelector<HTMLElement>('[data-showreel]');
+  const video = root?.querySelector<HTMLVideoElement>('video');
+  const pauseBtn = root?.querySelector<HTMLButtonElement>('[data-pause]');
+
+  if (root && video && pauseBtn) {
+    let vomNutzerPausiert = false;
+    const label = pauseBtn.querySelector<HTMLElement>('.visually-hidden')!;
+
+    const setPausiert = (p: boolean) => {
+      pauseBtn.setAttribute('aria-pressed', String(p));
+      label.textContent = p ? label.dataset.labelPlay! : label.dataset.labelPause!;
+    };
+
+    const laden = () => {
+      if (!previewsErlaubt()) return;
+      const desktop = matchMedia('(min-width: 900px) and (min-resolution: 1dppx)').matches && innerWidth >= 900;
+      video.src = (desktop ? video.dataset.srcDesktop : video.dataset.srcMobil)!;
+      video.preload = 'auto';
+      video.addEventListener(
+        'playing',
+        () => {
+          root.classList.add('is-playing');
+          pauseBtn.hidden = false;
+        },
+        { once: true },
+      );
+      video.play().catch(() => {});
+    };
+
+    // Erst nach dem vollständigen Laden der Seite und wenn der Browser Luft hat
+    const wennRuhig = () =>
+      'requestIdleCallback' in window ? requestIdleCallback(laden, { timeout: 2500 }) : setTimeout(laden, 800);
+    document.readyState === 'complete' ? wennRuhig() : addEventListener('load', wennRuhig, { once: true });
+
+    // Außerhalb des sichtbaren Bereichs anhalten (spart Akku und Rechenzeit)
+    new IntersectionObserver(([e]) => {
+      if (!video.src || vomNutzerPausiert) return;
+      e.isIntersecting ? video.play().catch(() => {}) : video.pause();
+    }).observe(root);
+
+    pauseBtn.addEventListener('click', () => {
+      vomNutzerPausiert = !video.paused;
+      vomNutzerPausiert ? video.pause() : video.play();
+      setPausiert(vomNutzerPausiert);
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (!video.src || vomNutzerPausiert) return;
+      document.hidden ? video.pause() : video.play().catch(() => {});
+    });
+  }
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    height: 100svh;
+    min-height: 32rem;
+    display: grid;
+    align-items: end;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .hero__media,
+  .hero__media :global(img),
+  .hero__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero__media {
+    z-index: -1;
+    background: var(--surface);
+  }
+  .hero__media :global(img) {
+    animation: hero-in 1.4s var(--ease) both;
+  }
+  @keyframes hero-in {
+    from {
+      opacity: 0;
+      transform: scale(1.04);
+    }
+  }
+  .hero__video {
+    opacity: 0;
+    transition: opacity 1.2s var(--ease);
+  }
+  .hero.is-playing .hero__video {
+    opacity: 1;
+  }
+  .hero__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, rgb(11 12 14 / 0.95), rgb(11 12 14 / 0.25) 45%, rgb(11 12 14 / 0.1) 70%, rgb(11 12 14 / 0.4)),
+      radial-gradient(ellipse at 20% 100%, rgb(0 0 0 / 0.35), transparent 60%);
+  }
+  .hero__content {
+    width: 100%;
+    padding-bottom: clamp(4.5rem, 10vh, 8rem);
+  }
+  .hero__claim {
+    font-size: var(--fs-h1);
+    font-weight: 450;
+    letter-spacing: -0.03em;
+    max-width: 14ch;
+    animation: rise 1s 0.15s var(--ease) both;
+  }
+  .hero__sub {
+    max-width: 38rem;
+    margin: 1.25rem 0 2rem;
+    color: rgb(237 238 239 / 0.82);
+    font-size: clamp(1.05rem, 1rem + 0.4vw, 1.3rem);
+    animation: rise 1s 0.3s var(--ease) both;
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    animation: rise 1s 0.45s var(--ease) both;
+  }
+  .hero__actions .btn:not(.btn--primary) {
+    border-color: rgb(255 255 255 / 0.35);
+    backdrop-filter: blur(6px);
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  }
+  .hero__pause {
+    position: absolute;
+    right: var(--gutter);
+    bottom: clamp(1.5rem, 4vh, 2.5rem);
+    width: 2.75rem;
+    height: 2.75rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid rgb(255 255 255 / 0.3);
+    background: rgb(0 0 0 / 0.3);
+    color: #fff;
+    cursor: pointer;
+  }
+  .hero__pause .i-play,
+  .hero__pause[aria-pressed='true'] .i-pause {
+    display: none;
+  }
+  .hero__pause[aria-pressed='true'] .i-play {
+    display: block;
+  }
+  .hero__scroll {
+    position: absolute;
+    left: 50%;
+    bottom: 1.25rem;
+    width: 1px;
+    height: 3rem;
+    background: rgb(255 255 255 / 0.2);
+    overflow: hidden;
+  }
+  .hero__scroll span {
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    animation: scroll-hint 2.2s var(--ease) infinite;
+  }
+  @keyframes scroll-hint {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(100%);
+    }
+  }
+  @media (max-width: 699px) {
+    .hero__scroll {
+      display: none;
+    }
+  }
+</style>

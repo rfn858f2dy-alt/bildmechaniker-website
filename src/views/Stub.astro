@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import { useT, type Lang } from '../i18n/ui';
+interface Props { lang: Lang; titel: string; alternate: { de: string; en: string } }
+const { lang, titel, alternate } = Astro.props;
+const t = useT(lang);
+---
+<Base lang={lang} title={`${titel} – Bildmechaniker`} description={titel} alternate={alternate}>
+  <div class="wrap stub">
+    <h1>{titel}</h1>
+    <p>{t('stub.text')}</p>
+    <slot />
+  </div>
+</Base>
+<style>
+  .stub { padding-block: clamp(3rem, 8vw, 6rem); min-height: 50vh; }
+  h1 { font-size: var(--fs-h1); margin-bottom: 1rem; }
+  p { color: var(--muted); }
+</style>

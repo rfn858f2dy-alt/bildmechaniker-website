@@ -1,0 +1,90 @@
+---
+import { useT, routes, type Lang } from '../i18n/ui';
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const social = [
+  { label: 'Instagram', href: 'https://www.instagram.com/bildmechaniker/' },
+  { label: 'LinkedIn', href: '#' }, // TODO: LinkedIn-Profil-URL eintragen
+  { label: 'YouTube', href: '#' }, // TODO: YouTube-Kanal-URL eintragen
+];
+---
+
+<footer class="site-footer">
+  <div class="wrap grid">
+    <div>
+      <p class="claim">{t('hero.claim')}</p>
+      <a class="btn btn--primary" href={routes.kontakt[lang]}>{t('nav.kontakt')}</a>
+    </div>
+    <address>
+      Bildmechaniker GmbH<br />
+      Hans-Böckler-Str. 62<br />
+      40764 Langenfeld<br />
+      <a href="mailto:Roland@bildmechaniker.de">Roland@bildmechaniker.de</a><br />
+      <a href="tel:+491635295467">+49 163 5295467</a>
+    </address>
+    <ul class="social">
+      {social.map((s) => <li><a href={s.href} rel="noopener">{s.label}</a></li>)}
+    </ul>
+  </div>
+  <div class="wrap legal">
+    <span>© {new Date().getFullYear()} Bildmechaniker GmbH</span>
+    <a href={lang === 'de' ? '/de/impressum/' : '/en/legal-notice/'}>{t('footer.impressum')}</a>
+    <a href={lang === 'de' ? '/de/datenschutz/' : '/en/privacy/'}>{t('footer.datenschutz')}</a>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: clamp(4rem, 10vw, 8rem);
+    border-top: 1px solid var(--line);
+    padding-top: clamp(3rem, 6vw, 5rem);
+  }
+  .grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+  @media (min-width: 860px) {
+    .grid {
+      grid-template-columns: 2fr 1fr 1fr;
+    }
+  }
+  .claim {
+    font-size: var(--fs-h2);
+    font-weight: 450;
+    line-height: 1.1;
+    margin: 0 0 1.5rem;
+  }
+  address {
+    font-style: normal;
+    color: var(--muted);
+  }
+  address a,
+  .social a,
+  .legal a {
+    text-decoration: none;
+  }
+  address a:hover,
+  .social a:hover,
+  .legal a:hover {
+    color: var(--text);
+  }
+  .social {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    color: var(--muted);
+  }
+  .legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    padding-block: 2.5rem;
+    margin-top: 3rem;
+    border-top: 1px solid var(--line);
+    font-size: var(--fs-meta);
+    color: var(--muted);
+  }
+</style>

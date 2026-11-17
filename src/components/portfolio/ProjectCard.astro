@@ -1,0 +1,195 @@
+---
+/**
+ * Projektkachel: Standbild, stumme Vorschau (bei Hover / auf dem Handy beim Scrollen),
+ * Titel, Auftraggeber, Jahr und unsere Rolle. Ein Klick öffnet die Detailseite.
+ * Der Vorschauclip wird erst geladen, wenn er wirklich gebraucht wird (siehe portfolio.ts).
+ */
+import { Picture } from 'astro:assets';
+import type { Projekt } from '../../lib/projekte';
+import { projektPfad, tx, txa, type Lang } from '../../i18n/ui';
+
+interface Props {
+  projekt: Projekt;
+  lang: Lang;
+  /** Die ersten sichtbaren Kacheln sofort laden statt lazy. */
+  eager?: boolean;
+  gross?: boolean;
+  stufe?: 2 | 3;
+}
+const { projekt, lang, eager = false, gross = false, stufe = 3 } = Astro.props;
+const H = stufe === 2 ? 'h2' : 'h3';
+const d = projekt.data;
+const titel = tx(d.titel, lang);
+const meta = [d.auftraggeber, d.jahr].filter(Boolean).join(' · ');
+---
+
+<li class:list={['card', { 'card--gross': gross }]} data-card data-kategorien={d.kategorien.join(' ')}>
+  <a class="card__link" href={projektPfad(lang, projekt.id)} data-preview={d.vorschau} data-astro-prefetch>
+    <div class="card__media skeleton">
+      <Picture
+        class="card__poster"
+        src={d.poster}
+        alt=""
+        formats={['avif', 'webp']}
+        widths={[480, 720, 960, 1280, 1600]}
+        sizes={gross
+          ? '(min-width: 1100px) 66vw, (min-width: 700px) 100vw, 100vw'
+          : '(min-width: 1100px) 33vw, (min-width: 700px) 50vw, 100vw'}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+        fetchpriority={eager ? 'high' : 'auto'}
+        style={`view-transition-name: poster-${projekt.id}`}
+      />
+      {d.vorschau && <span class="card__spinner" aria-hidden="true" />}
+      {d.vorschau && <span class="card__badge" aria-hidden="true">Preview</span>}
+    </div>
+    <div class="card__info">
+      <H class="card__title">{titel}</H>
+      <p class="card__meta">{meta}</p>
+      <p class="card__role">{txa(d.rolle, lang).join(' · ')}</p>
+    </div>
+  </a>
+</li>
+
+<style>
+  .card {
+    list-style: none;
+    min-width: 0;
+  }
+  .card[hidden] {
+    display: none;
+  }
+  .card__link {
+    display: block;
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+    border-radius: var(--radius);
+    outline-offset: -2px;
+  }
+  .card__media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+  .card--gross .card__media {
+    aspect-ratio: 16 / 9;
+  }
+  .card__media :global(img),
+  .card__media :global(video) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .card__media :global(img) {
+    opacity: 0;
+    transform: scale(1.02);
+    transition: opacity 0.7s var(--ease), transform 1.2s var(--ease);
+  }
+  .card.is-loaded .card__media :global(img) {
+    opacity: 1;
+    transform: none;
+  }
+  .card.is-loaded .card__media {
+    animation: none;
+    background: var(--surface);
+  }
+  .card__media :global(video) {
+    opacity: 0;
+    transition: opacity 0.45s var(--ease);
+  }
+  .card.is-playing .card__media :global(video) {
+    opacity: 1;
+  }
+  /* Abdunkelung für lesbare Schrift auf dem Bild */
+  .card__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.72), rgb(0 0 0 / 0.1) 45%, transparent 70%);
+    pointer-events: none;
+  }
+  .card__info {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 2;
+    padding: clamp(1rem, 0.6rem + 1.4vw, 1.75rem);
+  }
+  .card__title {
+    font-size: var(--fs-h3);
+    font-weight: 500;
+  }
+  .card--gross .card__title {
+    font-size: clamp(1.4rem, 1rem + 1.5vw, 2.2rem);
+  }
+  .card__meta,
+  .card__role {
+    margin: 0.25rem 0 0;
+    font-size: var(--fs-meta);
+    color: rgb(237 238 239 / 0.75);
+  }
+  .card__role {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.45s var(--ease), opacity 0.45s var(--ease);
+  }
+  .card__link:hover .card__role,
+  .card__link:focus-visible .card__role,
+  .card.is-playing .card__role {
+    max-height: 3em;
+    opacity: 1;
+  }
+  @media (hover: none) {
+    .card__role {
+      max-height: none;
+      opacity: 1;
+    }
+  }
+  .card__link:hover :global(img) {
+    transform: scale(1.03);
+  }
+  /* Ladeanimation: dünner Ring, erscheint nur, wenn die Vorschau spürbar lädt */
+  .card__spinner {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 3;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    border: 1.5px solid rgb(255 255 255 / 0.25);
+    border-top-color: #fff;
+    opacity: 0;
+    transition: opacity 0.2s;
+    animation: spin 0.9s linear infinite;
+  }
+  .card.is-buffering .card__spinner {
+    opacity: 1;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+  .card__badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 3;
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    background: rgb(0 0 0 / 0.45);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card.is-playing .card__badge {
+    opacity: 1;
+  }
+</style>

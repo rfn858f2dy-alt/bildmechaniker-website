@@ -1,0 +1,332 @@
+---
+/**
+ * Projekt-Detailseite: großes Standbild mit Play-Knopf (öffnet die Lightbox),
+ * Eckdaten, Beschreibung, Galerie vom Set und Navigation zur nächsten Produktion.
+ */
+import { Picture, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import type { Projekt } from '../lib/projekte';
+import { useT, routes, projektPfad, tx, txa, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  projekt: Projekt;
+  vorher?: Projekt;
+  weiter?: Projekt;
+}
+const { lang, projekt, vorher, weiter } = Astro.props;
+const t = useT(lang);
+const d = projekt.data;
+const titel = tx(d.titel, lang);
+const absaetze = tx(d.beschreibung, lang).split(/\n\s*\n/).map((s) => s.trim()).filter(Boolean);
+const posterGross = await getImage({ src: d.poster, width: 1920, format: 'webp' });
+const hochkant = d.format === '9:16';
+
+const fakten = [
+  { k: t('projekt.auftraggeber'), v: d.auftraggeber },
+  d.jahr ? { k: t('projekt.jahr'), v: String(d.jahr) } : null,
+  { k: t('projekt.rolle'), v: txa(d.rolle, lang).join(', ') },
+  { k: t('projekt.kategorie'), v: d.kategorien.map((c) => t(`kat.${c}`)).join(', ') },
+  d.equipment.length ? { k: t('projekt.equipment'), v: d.equipment.join(', ') } : null,
+].filter(Boolean) as { k: string; v: string }[];
+
+const videoAttr = d.video
+  ? d.video.typ === 'youtube'
+    ? { 'data-youtube': d.video.id }
+    : { 'data-video-src': d.video.src, 'data-video-src-mobil': d.video.srcMobil }
+  : null;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': d.video ? 'VideoObject' : 'CreativeWork',
+  name: titel,
+  description: tx(d.kurz, lang),
+  thumbnailUrl: new URL(posterGross.src, Astro.site).href,
+  ...(d.video?.typ === 'datei' ? { contentUrl: new URL(d.video.src, Astro.site).href } : {}),
+  ...(d.jahr && /^\d{4}$/.test(String(d.jahr)) ? { dateCreated: String(d.jahr) } : {}),
+  creator: { '@type': 'Organization', name: 'Bildmechaniker GmbH' },
+};
+---
+
+<Base
+  lang={lang}
+  title={`${titel} – Bildmechaniker`}
+  description={tx(d.kurz, lang)}
+  alternate={{ de: projektPfad('de', projekt.id), en: projektPfad('en', projekt.id) }}>
+  <article>
+    <div class:list={['buehne', { 'buehne--hochkant': hochkant }]}>
+      <div class="buehne__media skeleton">
+        <Picture
+          src={d.poster}
+          alt={tx(d.posterAlt, lang)}
+          formats={['avif', 'webp']}
+          widths={[640, 960, 1280, 1920, 2560]}
+          sizes={hochkant ? '(min-width: 900px) 40vw, 100vw' : '100vw'}
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          style={`view-transition-name: poster-${projekt.id}`}
+        />
+        {
+          videoAttr && (
+            <button
+              type="button"
+              class="play"
+              data-lightbox
+              data-title={titel}
+              data-poster={posterGross.src}
+              data-format={d.format}
+              {...videoAttr}>
+              <span class="play__ring" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="28" height="28">
+                  <path d="M8 5v14l11-7z" fill="currentColor" />
+                </svg>
+              </span>
+              <span class="play__label">{t('projekt.abspielen')}</span>
+            </button>
+          )
+        }
+      </div>
+    </div>
+
+    <div class="wrap inhalt">
+      <a class="zurueck" href={routes.produktionen[lang]}><span aria-hidden="true">←</span> {t('projekt.zurueck')}</a>
+      <header class="kopf">
+        <p class="eyebrow">{d.auftraggeber}{d.jahr && ` · ${d.jahr}`}</p>
+        <h1>{titel}</h1>
+        <p class="lead">{tx(d.kurz, lang)}</p>
+      </header>
+
+      <div class="spalten">
+        <dl class="fakten">
+          {
+            fakten.map((f) => (
+              <div>
+                <dt>{f.k}</dt>
+                <dd>{f.v}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        <div class="text">
+          {absaetze.map((a) => <p>{a}</p>)}
+          <a class="btn btn--primary" href={`${routes.kontakt[lang]}?projekt=${encodeURIComponent(titel)}`}>{t('projekt.anfragen')}</a>
+        </div>
+      </div>
+
+      {
+        d.galerie.length > 0 && (
+          <section class="galerie" aria-labelledby="galerie-titel">
+            <h2 id="galerie-titel">{t('projekt.galerie')}</h2>
+            <ul>
+              {d.galerie.map((g) => (
+                <li class="reveal">
+                  <Picture
+                    src={g.bild}
+                    alt={tx(g.alt, lang)}
+                    formats={['avif', 'webp']}
+                    widths={[480, 800, 1200]}
+                    sizes="(min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      <nav class="blaettern" aria-label={lang === 'de' ? 'Weitere Produktionen' : 'More productions'}>
+        {
+          vorher && (
+            <a href={projektPfad(lang, vorher.id)} rel="prev">
+              <span class="eyebrow">{t('projekt.vorher')}</span>
+              <span class="name">{tx(vorher.data.titel, lang)}</span>
+            </a>
+          )
+        }
+        {
+          weiter && (
+            <a href={projektPfad(lang, weiter.id)} rel="next" class="weiter">
+              <span class="eyebrow">{t('projekt.weiter')}</span>
+              <span class="name">{tx(weiter.data.titel, lang)}</span>
+            </a>
+          )
+        }
+      </nav>
+    </div>
+  </article>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</Base>
+
+<style>
+  .buehne {
+    background: #000;
+  }
+  .buehne__media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    max-height: 82svh;
+    width: 100%;
+    margin-inline: auto;
+    overflow: hidden;
+  }
+  .buehne--hochkant .buehne__media {
+    aspect-ratio: 9 / 16;
+    width: min(100%, calc(82svh * 9 / 16));
+  }
+  .buehne__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .buehne__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 40%, rgb(0 0 0 / 0.45));
+    pointer-events: none;
+  }
+  .play {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.9rem;
+    border: 0;
+    background: none;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+  .play__ring {
+    width: clamp(4.5rem, 3rem + 5vw, 6.5rem);
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid rgb(255 255 255 / 0.55);
+    background: rgb(0 0 0 / 0.25);
+    backdrop-filter: blur(8px);
+    transition: transform 0.5s var(--ease), background 0.3s, border-color 0.3s;
+  }
+  .play:hover .play__ring,
+  .play:focus-visible .play__ring {
+    transform: scale(1.08);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .play__label {
+    font-size: var(--fs-meta);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .inhalt {
+    padding-top: 2rem;
+  }
+  .zurueck {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  .zurueck:hover {
+    color: var(--text);
+  }
+  .kopf {
+    padding: clamp(2rem, 5vw, 4rem) 0 clamp(2rem, 4vw, 3rem);
+    max-width: 56rem;
+  }
+  .kopf h1 {
+    font-size: var(--fs-h1);
+    margin: 0.75rem 0 1rem;
+  }
+  .lead {
+    font-size: clamp(1.1rem, 1rem + 0.5vw, 1.45rem);
+    color: rgb(237 238 239 / 0.85);
+    margin: 0;
+  }
+  .spalten {
+    display: grid;
+    gap: 2.5rem;
+    border-top: 1px solid var(--line);
+    padding-top: 2.5rem;
+  }
+  @media (min-width: 900px) {
+    .spalten {
+      grid-template-columns: minmax(16rem, 1fr) 2fr;
+      gap: 5rem;
+    }
+  }
+  .fakten {
+    margin: 0;
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+  }
+  .fakten dt {
+    font-size: var(--fs-meta);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+  }
+  .fakten dd {
+    margin: 0.2rem 0 0;
+  }
+  .text {
+    max-width: 42rem;
+  }
+  .text p {
+    margin: 0 0 1.2em;
+  }
+  .text .btn {
+    margin-top: 1rem;
+  }
+  .galerie {
+    margin-top: clamp(4rem, 8vw, 6rem);
+  }
+  .galerie h2 {
+    font-size: var(--fs-h2);
+    margin-bottom: 1.5rem;
+  }
+  .galerie ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 3px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+  }
+  .galerie :global(img) {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    background: var(--surface);
+  }
+  .blaettern {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: clamp(4rem, 8vw, 6rem);
+    border-top: 1px solid var(--line);
+    padding-top: 2rem;
+  }
+  .blaettern a {
+    display: grid;
+    gap: 0.4rem;
+    text-decoration: none;
+  }
+  .blaettern .weiter {
+    grid-column: 2;
+    text-align: right;
+  }
+  .blaettern .name {
+    font-size: var(--fs-h3);
+    transition: color 0.2s;
+  }
+  .blaettern a:hover .name {
+    color: var(--accent);
+  }
+</style>
