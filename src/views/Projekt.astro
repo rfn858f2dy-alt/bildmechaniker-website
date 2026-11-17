@@ -291,18 +291,21 @@ const jsonLd = {
     font-size: var(--fs-h2);
     margin-bottom: 1.5rem;
   }
+  /* Galerie als Mauerwerk: jedes Foto behält sein Seitenverhältnis (Hoch- und Querformat) */
   .galerie ul {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: grid;
-    gap: 3px;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+    columns: 3 18rem;
+    column-gap: 3px;
+  }
+  .galerie li {
+    break-inside: avoid;
+    margin-bottom: 3px;
   }
   .galerie :global(img) {
     width: 100%;
-    aspect-ratio: 3 / 2;
-    object-fit: cover;
+    height: auto;
     background: var(--surface);
   }
   .blaettern {

@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "projekt:neu": "node scripts/projekt-neu.mjs",
     "showreel": "node scripts/showreel.mjs",
-    "platzhalter": "node scripts/platzhalter.mjs"
+    "platzhalter": "node scripts/platzhalter.mjs",
+    "fotos": "node scripts/fotos.mjs"
   },
   "dependencies": {
     "@fontsource-variable/outfit": "5.2.8",

@@ -15,7 +15,7 @@ beschreibung:
 
     This gives the broadcast shots from the touchline, the tunnel and the team arrivals that large studio cameras cannot capture.
 auftraggeber: "Prime Video"
-# jahr: 2025   ← Produktionsjahr eintragen
+jahr: 2026
 rolle:
   de: ["Mobile Kamera","Live-Bildfunk"]
   en: ["Mobile camera","Live wireless video"]
@@ -23,26 +23,13 @@ kategorien: ["sport"]
 equipment: ["Sony FX6","DJI Ronin","DTC Domo Live"]
 poster: ../../assets/projekte/champions-league/poster.jpg
 posterAlt:
-  de: "Platzhalter-Standbild Champions League"
-  en: "Placeholder still Champions League"
-vorschau: /media/projekte/champions-league/vorschau.mp4
-video:
-  typ: datei
-  src: /media/projekte/champions-league/film-1080.mp4
-  srcMobil: /media/projekte/champions-league/film-720.mp4
+  de: "Flutlicht im voll besetzten Stadion kurz vor Anpfiff, Blick vom Spielfeldrand"
+  en: "Floodlit, sold-out stadium just before kick-off, seen from the touchline"
 galerie:
   - bild: ../../assets/projekte/champions-league/set-1.jpg
     alt:
-      de: "Platzhalter Set-Foto 1"
-      en: "Placeholder set photo 1"
-  - bild: ../../assets/projekte/champions-league/set-2.jpg
-    alt:
-      de: "Platzhalter Set-Foto 2"
-      en: "Placeholder set photo 2"
-  - bild: ../../assets/projekte/champions-league/set-3.jpg
-    alt:
-      de: "Platzhalter Set-Foto 3"
-      en: "Placeholder set photo 3"
+      de: "Sony FX6 mit Funkmonitor am Spielfeldrand, im Hintergrund eine Live-Schalte"
+      en: "Sony FX6 with wireless monitor on the touchline, a live interview in the background"
 highlight: true
 reihenfolge: 1
 ---

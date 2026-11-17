@@ -20,7 +20,7 @@ const film = showreel.film;
 const filmPoster = await getImage({ src: showreel.poster, width: 1920, format: 'webp' });
 ---
 
-<section class="hero" data-showreel aria-label={lang === 'de' ? 'Showreel' : 'Showreel'}>
+<section class:list={['hero', { 'hero--still': !showreel.loop }]} data-showreel aria-label={lang === 'de' ? 'Showreel' : 'Showreel'}>
   <div class="hero__media">
     <Picture
       src={showreel.poster}
@@ -33,7 +33,7 @@ const filmPoster = await getImage({ src: showreel.poster, width: 1920, format: '
       decoding="async"
       class="hero__poster"
     />
-    <video
+    {showreel.loop && <video
       class="hero__video"
       muted
       loop
@@ -43,7 +43,7 @@ const filmPoster = await getImage({ src: showreel.poster, width: 1920, format: '
       tabindex="-1"
       disablepictureinpicture
       data-src-mobil={showreel.loop.mobil}
-      data-src-desktop={showreel.loop.desktop}></video>
+      data-src-desktop={showreel.loop.desktop}></video>}
   </div>
 
   <div class="hero__content wrap">
@@ -70,13 +70,13 @@ const filmPoster = await getImage({ src: showreel.poster, width: 1920, format: '
     </div>
   </div>
 
-  <button class="hero__pause" type="button" data-pause hidden aria-pressed="false">
+  {showreel.loop && <button class="hero__pause" type="button" data-pause hidden aria-pressed="false">
     <span class="visually-hidden" data-label-pause={lang === 'de' ? 'Hintergrundvideo anhalten' : 'Pause background video'} data-label-play={lang === 'de' ? 'Hintergrundvideo abspielen' : 'Play background video'}
       >{lang === 'de' ? 'Hintergrundvideo anhalten' : 'Pause background video'}</span
     >
     <svg class="i-pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 5h3v14H7zM14 5h3v14h-3z" fill="currentColor" /></svg>
     <svg class="i-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor" /></svg>
-  </button>
+  </button>}
 
   <a class="hero__scroll" href="#auswahl" aria-label={t('home.auswahl')}><span></span></a>
 </section>
@@ -167,6 +167,20 @@ const filmPoster = await getImage({ src: showreel.poster, width: 1920, format: '
     from {
       opacity: 0;
       transform: scale(1.04);
+    }
+  }
+  /* Ohne Videoloop: sehr langsame Kamerafahrt über das Standbild */
+  .hero--still .hero__media :global(img) {
+    animation:
+      hero-in 1.4s var(--ease) both,
+      kamerafahrt 28s 1.4s ease-in-out infinite alternate;
+  }
+  @keyframes kamerafahrt {
+    from {
+      transform: scale(1) translate(0, 0);
+    }
+    to {
+      transform: scale(1.08) translate(-1.5%, -1%);
     }
   }
   .hero__video {
