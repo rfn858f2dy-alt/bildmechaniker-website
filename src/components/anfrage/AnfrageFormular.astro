@@ -1,0 +1,763 @@
+---
+/**
+ * Mehrstufiges Anfrageformular. Sendet an /api/anfrage.php (PHP auf dem Host-Europe-Webspace).
+ * Optionen (Projektarten, Leistungen, Budget, Upload-Grenzen) stehen in public/api/optionen.json.
+ */
+import optionen from '../../../public/api/optionen.json';
+import { anfrageTexte } from '../../i18n/anfrage';
+import type { Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = anfrageTexte(lang);
+const up = optionen.upload;
+const g = optionen.grenzen;
+const datenschutzLink = lang === 'de' ? '/de/datenschutz/#anfrage' : '/en/privacy/#enquiry';
+const label = (o: { de: string; en: string }) => o[lang];
+
+// Texte für das Skript (Funktionen werden zu Vorlagen mit Platzhaltern)
+const clientTexte = {
+  ...t.fehler,
+  dateiTyp: t.fehler.dateiTyp('{n}'),
+  dateiGross: t.fehler.dateiGross('{n}', up.maxMB),
+  dateiAnzahl: t.fehler.dateiAnzahl(up.maxDateien),
+  dateiGesamt: t.fehler.dateiGesamt(up.maxGesamtMB),
+  schrittVon: t.schrittVon(99, 98),
+  hochladen: t.hochladen(99),
+  sendet: t.sendet,
+  senden: t.senden,
+  entfernen: t.entfernen,
+  offen: t.zeitraumOffen,
+  keineAngabe: '–',
+};
+const s = (n: number) => `schritt-${n}`;
+---
+
+<div class="anfrage" data-anfrage data-lang={lang} data-texte={JSON.stringify(clientTexte)} data-grenzen={JSON.stringify({ ...up, ...g })}>
+  <noscript>
+    <div class="hinweis">
+      <p>{t.ohneJs}</p>
+      <p><a href="mailto:Roland@bildmechaniker.de">Roland@bildmechaniker.de</a> · <a href="tel:+491635295467">+49 163 5295467</a></p>
+    </div>
+  </noscript>
+
+  <form class="formular" action="/api/anfrage.php" method="post" enctype="multipart/form-data" novalidate hidden data-form>
+    <ol class="fortschritt" aria-label={lang === 'de' ? 'Fortschritt' : 'Progress'}>
+      {
+        t.schritte.map((name, i) => (
+          <li data-anzeige={i + 1} aria-current={i === 0 ? 'step' : undefined}>
+            <span class="nr" aria-hidden="true">{i + 1}</span>
+            <span class="name">{name}</span>
+          </li>
+        ))
+      }
+    </ol>
+    <p class="visually-hidden" aria-live="polite" data-status></p>
+
+    <div class="fehlerbox" role="alert" tabindex="-1" hidden data-fehlerbox>
+      <p>{t.fehlerTitel}</p>
+      <ul></ul>
+    </div>
+
+    <input type="hidden" name="lang" value={lang} />
+    <input type="hidden" name="token" value="" data-token />
+    <input type="hidden" name="bezug" value="" data-bezug />
+    <div class="hp" aria-hidden="true">
+      <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+    </div>
+
+    <!-- 1 Projekt -->
+    <section class="schritt" id={s(1)} data-schritt="1" aria-labelledby="t-1">
+      <h2 class="visually-hidden" id="t-1">{t.schritte[0]}</h2>
+      <p class="bezug" hidden data-bezug-anzeige><span>{t.bezug}:</span> <strong></strong></p>
+
+      <fieldset class="feld" data-feld="projektart" aria-describedby="fehler-projektart">
+        <legend>{t.projektart} <span class="stern" aria-hidden="true">*</span></legend>
+        <div class="karten">
+          {
+            Object.entries(optionen.projektarten).map(([k, v]) => (
+              <label class="karte">
+                <input type="radio" name="projektart" value={k} required />
+                <span>{label(v)}</span>
+              </label>
+            ))
+          }
+        </div>
+        <p class="feldfehler" id="fehler-projektart" hidden></p>
+      </fieldset>
+
+      <fieldset class="feld" data-feld="leistungen" aria-describedby="hilfe-leistungen fehler-leistungen">
+        <legend>{t.leistungen} <span class="stern" aria-hidden="true">*</span></legend>
+        <p class="hilfe" id="hilfe-leistungen">{t.leistungenHilfe}</p>
+        <div class="karten">
+          {
+            Object.entries(optionen.leistungen).map(([k, v]) => (
+              <label class="karte karte--check">
+                <input type="checkbox" name="leistungen[]" value={k} />
+                <span>{label(v)}</span>
+              </label>
+            ))
+          }
+        </div>
+        <p class="feldfehler" id="fehler-leistungen" hidden></p>
+      </fieldset>
+    </section>
+
+    <!-- 2 Details -->
+    <section class="schritt" id={s(2)} data-schritt="2" aria-labelledby="t-2" hidden>
+      <h2 class="visually-hidden" id="t-2">{t.schritte[1]}</h2>
+
+      <div class="feld" data-feld="beschreibung">
+        <label for="f-beschreibung">{t.beschreibung} <span class="stern" aria-hidden="true">*</span></label>
+        <p class="hilfe" id="hilfe-beschreibung">{t.beschreibungHilfe}</p>
+        <textarea id="f-beschreibung" name="beschreibung" rows="6" required minlength={g.beschreibungMin} maxlength={g.beschreibungMax} aria-describedby="hilfe-beschreibung zaehler-beschreibung fehler-beschreibung"></textarea>
+        <p class="zaehler" id="zaehler-beschreibung" data-zaehler>0 / {g.beschreibungMax}</p>
+        <p class="feldfehler" id="fehler-beschreibung" hidden></p>
+      </div>
+
+      <fieldset class="feld" data-feld="zeitraum">
+        <legend>{t.zeitraum} <span class="stern" aria-hidden="true">*</span></legend>
+        <div class="zwei">
+          <div data-feld="von">
+            <label for="f-von">{t.von}</label>
+            <input type="date" id="f-von" name="von" aria-describedby="fehler-von" />
+            <p class="feldfehler" id="fehler-von" hidden></p>
+          </div>
+          <div data-feld="bis">
+            <label for="f-bis">{t.bis} <span class="opt">({t.optional})</span></label>
+            <input type="date" id="f-bis" name="bis" aria-describedby="fehler-bis" />
+            <p class="feldfehler" id="fehler-bis" hidden></p>
+          </div>
+        </div>
+        <label class="check"><input type="checkbox" name="zeitraum_offen" value="1" data-offen /> {t.zeitraumOffen}</label>
+      </fieldset>
+
+      <div class="feld" data-feld="ort">
+        <label for="f-ort">{t.ort} <span class="stern" aria-hidden="true">*</span></label>
+        <input type="text" id="f-ort" name="ort" required maxlength="160" placeholder={t.ortPlatzhalter} autocomplete="off" aria-describedby="fehler-ort" />
+        <p class="feldfehler" id="fehler-ort" hidden></p>
+      </div>
+
+      <fieldset class="feld" data-feld="budget" aria-describedby="hilfe-budget fehler-budget">
+        <legend>{t.budget} <span class="stern" aria-hidden="true">*</span></legend>
+        <p class="hilfe" id="hilfe-budget">{t.budgetHilfe}</p>
+        <div class="chips">
+          {
+            Object.entries(optionen.budget).map(([k, v]) => (
+              <label class="chip">
+                <input type="radio" name="budget" value={k} />
+                <span>{label(v)}</span>
+              </label>
+            ))
+          }
+        </div>
+        <p class="feldfehler" id="fehler-budget" hidden></p>
+      </fieldset>
+
+      <div class="feld" data-feld="unterlagen">
+        <span class="label" id="l-unterlagen">{t.unterlagen} <span class="opt">({t.optional})</span></span>
+        <div class="dropzone" data-dropzone>
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 16V4m0 0l-4.5 4.5M12 4l4.5 4.5M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          <span>
+            {t.unterlagenZiehen}
+            <label class="link" for="f-unterlagen">{t.unterlagenWaehlen}</label>
+          </span>
+          <input
+            type="file"
+            id="f-unterlagen"
+            name="unterlagen[]"
+            multiple
+            accept={up.endungen.map((e) => '.' + e).join(',')}
+            aria-labelledby="l-unterlagen"
+            aria-describedby="hilfe-unterlagen fehler-unterlagen"
+            class="visually-hidden"
+          />
+        </div>
+        <p class="hilfe" id="hilfe-unterlagen">{t.unterlagenHilfe(up.maxDateien, up.maxMB, up.maxGesamtMB)}</p>
+        <ul class="dateien" data-dateien></ul>
+        <p class="feldfehler" id="fehler-unterlagen" hidden></p>
+      </div>
+    </section>
+
+    <!-- 3 Kontakt -->
+    <section class="schritt" id={s(3)} data-schritt="3" aria-labelledby="t-3" hidden>
+      <h2 class="visually-hidden" id="t-3">{t.schritte[2]}</h2>
+      <div class="zwei">
+        <div class="feld" data-feld="name">
+          <label for="f-name">{t.name} <span class="stern" aria-hidden="true">*</span></label>
+          <input type="text" id="f-name" name="name" required maxlength="120" autocomplete="name" aria-describedby="fehler-name" />
+          <p class="feldfehler" id="fehler-name" hidden></p>
+        </div>
+        <div class="feld" data-feld="firma">
+          <label for="f-firma">{t.firma} <span class="opt">({t.optional})</span></label>
+          <input type="text" id="f-firma" name="firma" maxlength="160" autocomplete="organization" />
+        </div>
+        <div class="feld" data-feld="email">
+          <label for="f-email">{t.email} <span class="stern" aria-hidden="true">*</span></label>
+          <input type="email" id="f-email" name="email" required maxlength="200" autocomplete="email" inputmode="email" aria-describedby="fehler-email" />
+          <p class="feldfehler" id="fehler-email" hidden></p>
+        </div>
+        <div class="feld" data-feld="telefon">
+          <label for="f-telefon">{t.telefon} <span class="opt">({t.optional})</span></label>
+          <input type="tel" id="f-telefon" name="telefon" maxlength="40" autocomplete="tel" inputmode="tel" aria-describedby="hilfe-telefon fehler-telefon" />
+          <p class="hilfe" id="hilfe-telefon">{t.telefonHilfe}</p>
+          <p class="feldfehler" id="fehler-telefon" hidden></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 Prüfen & Absenden -->
+    <section class="schritt" id={s(4)} data-schritt="4" aria-labelledby="t-4" hidden>
+      <h2 class="schritt__titel" id="t-4">{t.pruefen}</h2>
+      <dl class="zusammenfassung" data-zusammenfassung data-aendern={t.aendern}
+        data-labels={JSON.stringify({
+          projektart: [lang === 'de' ? 'Projektart' : 'Project type', 1], leistungen: [lang === 'de' ? 'Leistungen' : 'Services', 1],
+          beschreibung: [t.beschreibung, 2], zeitraum: [t.zeitraum, 2], ort: [t.ort, 2], budget: [t.budget, 2], unterlagen: [t.unterlagen, 2],
+          name: [t.name, 3], firma: [t.firma, 3], email: [t.email, 3], telefon: [t.telefon, 3],
+        })}></dl>
+
+      <p class="unverbindlich">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M12 11v6M12 7.5v.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+        <span>{t.unverbindlich}</span>
+      </p>
+
+      <div class="feld" data-feld="datenschutz">
+        <label class="check">
+          <input type="checkbox" name="datenschutz" value="ja" required aria-describedby="fehler-datenschutz" />
+          <span set:html={t.datenschutz(datenschutzLink)} />
+        </label>
+        <p class="feldfehler" id="fehler-datenschutz" hidden></p>
+      </div>
+    </section>
+
+    <div class="navigation">
+      <button type="button" class="btn" data-zurueck hidden>{t.zurueck}</button>
+      <span class="schrittzahl" data-schrittzahl aria-hidden="true">{t.schrittVon(1, 4)}</span>
+      <button type="button" class="btn btn--primary" data-weiter>{t.weiter}</button>
+      <button type="submit" class="btn btn--primary" data-senden hidden>{t.senden}</button>
+    </div>
+    <div class="upload-fortschritt" hidden data-upload><span></span></div>
+  </form>
+
+  <div class="erfolg" hidden data-erfolg tabindex="-1" aria-labelledby="erfolg-titel">
+    <svg class="erfolg__icon" viewBox="0 0 48 48" width="56" height="56" aria-hidden="true"><circle cx="24" cy="24" r="22" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M15 24.5l6 6 12-13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    <h2 id="erfolg-titel">{t.erfolgTitel}</h2>
+    <p class="ref">{t.erfolgRef}: <strong data-ref></strong></p>
+    <p data-erfolg-text data-ok={t.erfolgText} data-ohne-mail={t.erfolgKeineMail}>{t.erfolgText}</p>
+    <p class="unverbindlich"><span>{t.erfolgHinweis}</span></p>
+    <a class="btn" href={lang === 'de' ? '/de/produktionen/' : '/en/productions/'}>{t.erfolgZurueck}</a>
+  </div>
+</div>
+
+<script>
+  import { initAnfrage } from '../../scripts/anfrage';
+  document.querySelectorAll<HTMLElement>('[data-anfrage]').forEach(initAnfrage);
+</script>
+
+<style>
+  .anfrage {
+    --feld-bg: var(--surface);
+    position: relative;
+  }
+  .hinweis,
+  .unverbindlich {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    padding: 1rem 1.15rem;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+    border-radius: var(--radius);
+    color: var(--text);
+    margin: 0 0 1.5rem;
+  }
+  .unverbindlich svg {
+    flex: none;
+    color: var(--accent);
+    margin-top: 0.15rem;
+  }
+
+  /* Fortschritt */
+  .fortschritt {
+    list-style: none;
+    margin: 0 0 2rem;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    counter-reset: s;
+  }
+  .fortschritt li {
+    display: grid;
+    gap: 0.6rem;
+    font-size: var(--fs-meta);
+    color: var(--muted);
+    padding-top: 0.75rem;
+    border-top: 2px solid var(--line);
+    transition: color 0.3s, border-color 0.4s var(--ease);
+  }
+  .fortschritt .nr {
+    display: none;
+  }
+  .fortschritt li.erledigt {
+    border-color: var(--text);
+    color: var(--text);
+  }
+  .fortschritt li[aria-current='step'] {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+  @media (max-width: 480px) {
+    .fortschritt .name {
+      display: none;
+    }
+    .fortschritt li {
+      padding-top: 0;
+    }
+  }
+
+  /* Felder */
+  .schritt {
+    display: grid;
+    gap: 2rem;
+    animation: schritt-in 0.5s var(--ease);
+  }
+  @keyframes schritt-in {
+    from {
+      opacity: 0;
+      transform: translateX(16px);
+    }
+  }
+  .schritt[hidden] {
+    display: none;
+  }
+  .schritt__titel {
+    font-size: var(--fs-h3);
+  }
+  fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+  legend,
+  label,
+  .label {
+    display: block;
+    font-weight: 450;
+    margin-bottom: 0.5rem;
+  }
+  legend {
+    padding: 0;
+    margin-bottom: 0.75rem;
+    font-size: 1.05rem;
+  }
+  .stern {
+    color: var(--accent);
+  }
+  .opt {
+    color: var(--muted);
+    font-weight: 350;
+    font-size: 0.9em;
+  }
+  .hilfe,
+  .zaehler {
+    margin: -0.25rem 0 0.75rem;
+    font-size: var(--fs-meta);
+    color: var(--muted);
+  }
+  .zaehler {
+    margin: 0.35rem 0 0;
+    text-align: right;
+  }
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'],
+  input[type='date'],
+  textarea {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--feld-bg);
+    color: var(--text);
+    font: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 9rem;
+  }
+  input::placeholder,
+  textarea::placeholder {
+    color: #6d7177;
+  }
+  input:hover,
+  textarea:hover {
+    border-color: #3d4146;
+  }
+  input:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgb(46 143 227 / 0.25);
+  }
+  [aria-invalid='true'] {
+    border-color: #ff6b6b !important;
+  }
+  input:disabled {
+    opacity: 0.4;
+  }
+  .feldfehler {
+    margin: 0.5rem 0 0;
+    color: #ff8a8a;
+    font-size: 0.9rem;
+  }
+  .zwei {
+    display: grid;
+    gap: 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .zwei {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* Auswahlkarten und Chips */
+  .karten {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 13.5rem), 1fr));
+    gap: 0.5rem;
+  }
+  .karte,
+  .chip {
+    position: relative;
+    margin: 0;
+    cursor: pointer;
+    font-weight: 350;
+  }
+  .karte input,
+  .chip input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .karte span {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 3.25rem;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .karte span::before {
+    content: '';
+    flex: none;
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 1.5px solid #555a60;
+    border-radius: 50%;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  }
+  .karte--check span::before {
+    border-radius: 3px;
+  }
+  .karte:hover span {
+    border-color: #3d4146;
+  }
+  .karte input:checked + span {
+    border-color: var(--accent);
+    background: rgb(46 143 227 / 0.08);
+  }
+  .karte input:checked + span::before {
+    border-color: var(--accent);
+    background: var(--accent);
+    box-shadow: inset 0 0 0 3px var(--surface);
+  }
+  .karte--check input:checked + span::before {
+    box-shadow: none;
+    background: var(--accent)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E")
+      center / 80% no-repeat;
+  }
+  .karte input:focus-visible + span,
+  .chip input:focus-visible + span {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  [aria-invalid='true'] .karte span,
+  [aria-invalid='true'] .chip span {
+    border-color: rgb(255 107 107 / 0.6);
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .chip span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.5rem 1.1rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    transition: all 0.2s;
+  }
+  .chip:hover span {
+    border-color: var(--muted);
+  }
+  .chip input:checked + span {
+    background: var(--text);
+    border-color: var(--text);
+    color: var(--bg);
+  }
+  .check {
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+    font-weight: 350;
+    cursor: pointer;
+    margin-top: 0.75rem;
+  }
+  .check input {
+    flex: none;
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-top: 0.25rem;
+    accent-color: var(--accent);
+  }
+  .check a {
+    color: var(--text);
+  }
+
+  /* Upload */
+  .dropzone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 6rem;
+    padding: 1.25rem;
+    border: 1px dashed #464a50;
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--muted);
+    text-align: center;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .dropzone.ist-drueber {
+    border-color: var(--accent);
+    background: rgb(46 143 227 / 0.08);
+    color: var(--text);
+  }
+  .dropzone:focus-within {
+    border-color: var(--accent);
+  }
+  .dropzone .link {
+    display: inline;
+    margin: 0;
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  .dropzone .label {
+    margin: 0;
+  }
+  .dateien {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .dateien :global(li) {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.55rem 0.8rem;
+    background: var(--surface);
+    border-radius: var(--radius);
+    font-size: 0.92rem;
+    animation: schritt-in 0.35s var(--ease);
+  }
+  .dateien :global(.dname) {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .dateien :global(.dgroesse) {
+    color: var(--muted);
+    font-size: var(--fs-meta);
+  }
+  .dateien :global(button) {
+    border: 0;
+    background: none;
+    color: var(--muted);
+    font: inherit;
+    font-size: var(--fs-meta);
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0.4rem;
+  }
+  .dateien :global(button:hover) {
+    color: var(--text);
+  }
+
+  .bezug {
+    margin: 0;
+    color: var(--muted);
+  }
+  .bezug strong {
+    color: var(--text);
+    font-weight: 450;
+  }
+
+  /* Zusammenfassung */
+  .zusammenfassung {
+    margin: 0;
+    border-top: 1px solid var(--line);
+  }
+  .zusammenfassung :global(div) {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.25rem 1rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  @media (min-width: 640px) {
+    .zusammenfassung :global(div) {
+      grid-template-columns: 12rem 1fr auto;
+    }
+  }
+  .zusammenfassung :global(dt) {
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .zusammenfassung :global(dd) {
+    margin: 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  @media (max-width: 639px) {
+    .zusammenfassung :global(dd) {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+  }
+  .zusammenfassung :global(button) {
+    grid-column: -2;
+    grid-row: 1;
+    border: 0;
+    background: none;
+    color: var(--muted);
+    font: inherit;
+    font-size: var(--fs-meta);
+    text-decoration: underline;
+    cursor: pointer;
+    align-self: start;
+  }
+  .zusammenfassung :global(button:hover) {
+    color: var(--text);
+  }
+
+  /* Fehlerbox */
+  .fehlerbox {
+    border: 1px solid rgb(255 107 107 / 0.5);
+    background: rgb(255 107 107 / 0.07);
+    border-radius: var(--radius);
+    padding: 1rem 1.15rem;
+    margin-bottom: 1.75rem;
+  }
+  .fehlerbox p {
+    margin: 0 0 0.4rem;
+    font-weight: 450;
+  }
+  .fehlerbox ul {
+    margin: 0;
+    padding-left: 1.1rem;
+  }
+  .fehlerbox :global(a) {
+    color: #ffb3b3;
+  }
+
+  /* Navigation */
+  .navigation {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .schrittzahl {
+    margin-right: auto;
+    font-size: var(--fs-meta);
+    color: var(--muted);
+  }
+  [data-zurueck]:not([hidden]) + .schrittzahl {
+    margin-left: 0;
+  }
+  .navigation .btn[hidden] {
+    display: none;
+  }
+  .navigation [data-senden][aria-busy='true'] {
+    opacity: 0.7;
+    cursor: progress;
+  }
+  .upload-fortschritt {
+    height: 2px;
+    background: var(--line);
+    margin-top: 1rem;
+    overflow: hidden;
+  }
+  .upload-fortschritt span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--accent);
+    transition: width 0.2s;
+  }
+
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  /* Erfolg */
+  .erfolg {
+    padding: clamp(1.5rem, 4vw, 3rem) 0;
+    animation: schritt-in 0.6s var(--ease);
+    outline: none;
+  }
+  .erfolg__icon {
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+  .erfolg h2 {
+    font-size: var(--fs-h2);
+    margin-bottom: 1.25rem;
+  }
+  .erfolg .ref strong {
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+  .erfolg p {
+    max-width: 38rem;
+    color: rgb(237 238 239 / 0.85);
+  }
+  .erfolg .unverbindlich {
+    margin: 1.75rem 0 2rem;
+  }
+</style>

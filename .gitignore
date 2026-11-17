@@ -4,3 +4,7 @@ dist/
 .DS_Store
 # Rohmaterial (Originalclips) gehört nicht ins Repository
 rohmaterial/
+
+# Zugangsdaten des Anfrageformulars
+public/api/config.php
+public/api/daten/

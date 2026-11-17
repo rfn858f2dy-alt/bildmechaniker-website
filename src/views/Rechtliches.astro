@@ -1,0 +1,192 @@
+---
+/**
+ * Impressum und Datenschutzerklärung (DE/EN).
+ * Hinweis: Mustertext auf Basis der bisherigen Website – vor dem Livegang rechtlich prüfen lassen.
+ */
+import Base from '../layouts/Base.astro';
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  seite: 'impressum' | 'datenschutz';
+}
+const { lang, seite } = Astro.props;
+const alternate =
+  seite === 'impressum' ? { de: '/de/impressum/', en: '/en/legal-notice/' } : { de: '/de/datenschutz/', en: '/en/privacy/' };
+const titel = { impressum: { de: 'Impressum', en: 'Legal notice' }, datenschutz: { de: 'Datenschutzerklärung', en: 'Privacy policy' } }[seite][lang];
+const mail = '<a href="mailto:Roland@bildmechaniker.de">Roland@bildmechaniker.de</a>';
+---
+
+<Base lang={lang} title={`${titel} – Bildmechaniker`} description={titel} alternate={alternate}>
+  <article class="wrap recht">
+    <h1>{titel}</h1>
+
+    {
+      seite === 'impressum' && (
+        <>
+          <p>
+            <strong>Bildmechaniker GmbH</strong>
+            <br />
+            Hans-Böckler-Str. 62
+            <br />
+            40764 Langenfeld
+          </p>
+          <p>{lang === 'de' ? 'Geschäftsführung' : 'Managing director'}: Roland Possler</p>
+          <p>
+            {lang === 'de' ? 'Telefon' : 'Phone'}: <a href="tel:+491635295467">+49 163 5295467</a>
+            <br />
+            E-Mail: <Fragment set:html={mail} />
+          </p>
+          <p>
+            {lang === 'de' ? 'Registergericht' : 'Register court'}: Amtsgericht Düsseldorf
+            <br />
+            {lang === 'de' ? 'Handelsregisternummer' : 'Commercial register number'}: HRB 76220
+          </p>
+          <p>{lang === 'de' ? 'Umsatzsteuer-Identifikationsnummer' : 'VAT ID'}: DE240638592</p>
+        </>
+      )
+    }
+
+    {
+      seite === 'datenschutz' && lang === 'de' && (
+        <>
+          <h2>Verantwortlicher</h2>
+          <p>
+            Bildmechaniker GmbH, Hans-Böckler-Str. 62, 40764 Langenfeld
+            <br />
+            Geschäftsführung: Roland Possler · E-Mail: <Fragment set:html={mail} />
+          </p>
+
+          <h2>Hosting und Server-Logfiles</h2>
+          <p>
+            Diese Website wird bei der Host Europe GmbH gehostet. Beim Aufruf übermittelt Ihr Browser automatisch Daten an den Server, zum
+            Beispiel Ihre IP-Adresse, Datum und Uhrzeit, die aufgerufene Seite sowie Browser und Betriebssystem. Der Hosting-Anbieter
+            speichert diese Daten kurzzeitig in Logfiles, um die Seite sicher und stabil zu betreiben. Rechtsgrundlage ist Art. 6 Abs. 1
+            lit. f DSGVO. Mit dem Anbieter besteht ein Vertrag zur Auftragsverarbeitung.
+          </p>
+
+          <h2 id="anfrage">Anfrageformular</h2>
+          <p>
+            Wenn Sie uns über das Anfrageformular kontaktieren, verarbeiten wir die von Ihnen angegebenen Daten (Name, Unternehmen,
+            E-Mail-Adresse, optional Telefonnummer, Angaben zum Projekt, Zeitraum, Ort und Budget sowie hochgeladene Unterlagen), um Ihre
+            Anfrage zu prüfen und zu beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Anbahnung eines Vertrags).
+          </p>
+          <p>
+            Ihre Anfrage wird nicht in einer Datenbank auf dem Webserver gespeichert. Sie wird ausschließlich per verschlüsselter
+            E-Mail-Übertragung an unser Postfach zugestellt; hochgeladene Dateien werden dem Server nur für die Dauer des Versands
+            übergeben und anschließend automatisch gelöscht. Sie erhalten eine automatische Eingangsbestätigung an die angegebene
+            E-Mail-Adresse.
+          </p>
+          <p>
+            Zum Schutz vor Spam und automatisierten Anfragen nutzen wir ausschließlich eigene Verfahren ohne Drittanbieter: ein für
+            Menschen unsichtbares Feld, eine Mindestbearbeitungszeit und eine Begrenzung der Anfragen pro Stunde. Dafür wird ein aus Ihrer
+            IP-Adresse gebildeter, nicht rückrechenbarer Prüfwert höchstens eine Stunde gespeichert und danach automatisch gelöscht.
+            Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; unser berechtigtes Interesse ist der Schutz vor Missbrauch.
+          </p>
+          <p>
+            Wir löschen Ihre Anfrage, sobald sie erledigt ist und keine gesetzlichen Aufbewahrungspflichten entgegenstehen. Kommt ein
+            Auftrag zustande, gelten die handels- und steuerrechtlichen Aufbewahrungsfristen.
+          </p>
+
+          <h2>Kontakt per E-Mail oder Telefon</h2>
+          <p>
+            Wenn Sie uns per E-Mail oder Telefon kontaktieren, verarbeiten wir Ihre Angaben, um Ihre Anfrage zu beantworten.
+            Rechtsgrundlage ist Art. 6 Abs. 1 lit. b oder f DSGVO.
+          </p>
+
+          <h2>Cookies, Tracking und externe Inhalte</h2>
+          <p>
+            Diese Website setzt keine Cookies und verwendet keine Analyse- oder Tracking-Dienste. Schriften und Videos werden von unserem
+            eigenen Server geladen. Einzelne Videos können über YouTube eingebunden sein; diese werden erst nach Ihrem ausdrücklichen Klick
+            geladen. Dabei werden Daten an die Google Ireland Limited übertragen (Art. 6 Abs. 1 lit. a DSGVO).
+          </p>
+
+          <h2>Ihre Rechte</h2>
+          <p>
+            Sie haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch
+            (Art. 15 bis 21 DSGVO). Sie können sich außerdem bei einer Datenschutz-Aufsichtsbehörde beschweren, zum Beispiel bei der
+            Landesbeauftragten für Datenschutz und Informationsfreiheit Nordrhein-Westfalen.
+          </p>
+        </>
+      )
+    }
+
+    {
+      seite === 'datenschutz' && lang === 'en' && (
+        <>
+          <h2>Controller</h2>
+          <p>
+            Bildmechaniker GmbH, Hans-Böckler-Str. 62, 40764 Langenfeld, Germany
+            <br />
+            Managing director: Roland Possler · Email: <Fragment set:html={mail} />
+          </p>
+          <h2>Hosting and server log files</h2>
+          <p>
+            This website is hosted by Host Europe GmbH. When you visit it, your browser automatically transmits data such as your IP
+            address, date and time, the page requested, and your browser and operating system. The host briefly stores this data in log
+            files to operate the site securely. Legal basis: Art. 6(1)(f) GDPR. A data processing agreement is in place with the host.
+          </p>
+          <h2 id="enquiry">Enquiry form</h2>
+          <p>
+            When you contact us via the enquiry form, we process the data you provide (name, company, email address, optional phone
+            number, project details, dates, location, budget and uploaded documents) to review and answer your enquiry. Legal basis:
+            Art. 6(1)(b) GDPR (pre-contractual steps).
+          </p>
+          <p>
+            Your enquiry is not stored in a database on the web server. It is delivered only by encrypted email transfer to our mailbox;
+            uploaded files are held by the server only for the duration of sending and are deleted automatically afterwards. You receive an
+            automatic confirmation of receipt at the email address you provide.
+          </p>
+          <p>
+            To protect against spam we only use our own methods without third parties: a field invisible to humans, a minimum completion
+            time and a limit on enquiries per hour. For this, a non-reversible value derived from your IP address is stored for no more than
+            one hour and then deleted automatically. Legal basis: Art. 6(1)(f) GDPR; our legitimate interest is preventing abuse.
+          </p>
+          <p>
+            We delete your enquiry once it has been dealt with, unless statutory retention obligations apply. If a contract is concluded,
+            commercial and tax retention periods apply.
+          </p>
+          <h2>Contact by email or phone</h2>
+          <p>
+            If you contact us by email or phone, we process your details to answer your enquiry. Legal basis: Art. 6(1)(b) or (f) GDPR.
+          </p>
+          <h2>Cookies, tracking and external content</h2>
+          <p>
+            This website does not set cookies and does not use analytics or tracking services. Fonts and videos are served from our own
+            server. Some videos may be embedded via YouTube; these only load after you explicitly click, at which point data is transferred
+            to Google Ireland Limited (Art. 6(1)(a) GDPR).
+          </p>
+          <h2>Your rights</h2>
+          <p>
+            You have the right of access, rectification, erasure, restriction of processing, data portability and objection (Art. 15–21
+            GDPR). You may also lodge a complaint with a data protection supervisory authority, for example the State Commissioner for Data
+            Protection and Freedom of Information of North Rhine-Westphalia.
+          </p>
+        </>
+      )
+    }
+  </article>
+</Base>
+
+<style>
+  .recht {
+    max-width: 48rem;
+    padding-block: clamp(3rem, 7vw, 5.5rem);
+  }
+  h1 {
+    font-size: var(--fs-h1);
+    margin-bottom: 2rem;
+  }
+  h2 {
+    font-size: var(--fs-h3);
+    margin: 2.5rem 0 0.75rem;
+    scroll-margin-top: calc(var(--header-h) + 1rem);
+  }
+  p {
+    color: rgb(237 238 239 / 0.85);
+    margin: 0 0 1rem;
+  }
+  a {
+    color: var(--text);
+  }
+</style>

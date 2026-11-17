@@ -1,0 +1,126 @@
+---
+import Base from '../layouts/Base.astro';
+import AnfrageFormular from '../components/anfrage/AnfrageFormular.astro';
+import { anfrageTexte } from '../i18n/anfrage';
+import { routes, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = anfrageTexte(lang);
+---
+
+<Base lang={lang} title={`${t.titel} – Bildmechaniker`} description={t.intro} alternate={routes.kontakt}>
+  <div class="wrap kontakt">
+    <header class="intro">
+      <p class="eyebrow">{t.unverbindlichKurz}</p>
+      <h1>{t.titel}</h1>
+      <p class="lead">{t.intro}</p>
+    </header>
+
+    <aside class="info">
+      <h2>{t.ablaufTitel}</h2>
+      <ol class="ablauf">
+        {
+          t.ablauf.map(([titel, text], i) => (
+            <li class:list={{ letzter: i === t.ablauf.length - 1 }}>
+              <strong>{titel}</strong>
+              <span>{text}</span>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="direkt">
+        <h2>{t.direktTitel}</h2>
+        <p>{t.direkt}</p>
+        <p>
+          <a href="tel:+491635295467">+49 163 5295467</a><br />
+          <a href="mailto:Roland@bildmechaniker.de">Roland@bildmechaniker.de</a>
+        </p>
+      </div>
+    </aside>
+
+    <div class="formularspalte">
+      <AnfrageFormular lang={lang} />
+    </div>
+  </div>
+</Base>
+
+<style>
+  .kontakt {
+    display: grid;
+    gap: clamp(2rem, 5vw, 3.5rem) clamp(2.5rem, 6vw, 5rem);
+    padding-top: clamp(3rem, 7vw, 5.5rem);
+    grid-template-areas: 'intro' 'form' 'info';
+  }
+  .intro { grid-area: intro; }
+  .info { grid-area: info; }
+  .formularspalte { grid-area: form; min-width: 0; }
+  @media (min-width: 1000px) {
+    .kontakt {
+      grid-template-columns: minmax(18rem, 5fr) 7fr;
+      grid-template-rows: auto 1fr;
+      grid-template-areas: 'intro form' 'info form';
+      align-items: start;
+    }
+  }
+  h1 {
+    font-size: var(--fs-h1);
+    margin: 0.75rem 0 1.25rem;
+  }
+  .lead {
+    color: rgb(237 238 239 / 0.82);
+    font-size: clamp(1.05rem, 1rem + 0.35vw, 1.25rem);
+    margin: 0;
+    max-width: 34rem;
+  }
+  h2 {
+    font-size: var(--fs-meta);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    font-weight: 450;
+    margin-bottom: 1.25rem;
+  }
+  .ablauf {
+    list-style: none;
+    margin: 0 0 2.5rem;
+    padding: 0;
+    display: grid;
+    gap: 1.1rem;
+    counter-reset: a;
+  }
+  .ablauf li {
+    counter-increment: a;
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    column-gap: 0.75rem;
+  }
+  .ablauf li::before {
+    content: counter(a);
+    grid-row: span 2;
+    width: 1.75rem;
+    height: 1.75rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    font-size: var(--fs-meta);
+    color: var(--muted);
+  }
+  .ablauf li.letzter::before {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+  .ablauf strong { font-weight: 450; }
+  .ablauf span { color: var(--muted); font-size: 0.95rem; }
+  .direkt { border-top: 1px solid var(--line); padding-top: 1.75rem; }
+  .direkt p { color: var(--muted); margin: 0 0 0.75rem; }
+  .direkt a { color: var(--text); text-decoration: none; }
+  .direkt a:hover { color: var(--accent); }
+  @media (max-width: 999px) {
+    .info { border-top: 1px solid var(--line); padding-top: 2.5rem; }
+  }
+</style>

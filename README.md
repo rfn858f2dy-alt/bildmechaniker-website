@@ -88,3 +88,32 @@ src/
 scripts/                  Medien-Befehle (ffmpeg)
 public/.htaccess          HTTPS, Sprachweiche, Caching für Host Europe
 ```
+
+## Anfrageformular (`/de/kontakt/`, `/en/contact/`)
+
+Mehrstufiges Formular (Projekt → Details → Kontakt → Prüfen & Absenden). Der Versand läuft über
+`public/api/anfrage.php` auf dem Host-Europe-Webspace (PHP 8.1 oder neuer).
+
+**Einrichtung vor dem Livegang:**
+
+1. Im Host-Europe-KIS ein Postfach `anfrage@bildmechaniker.de` anlegen (oder ein vorhandenes nutzen).
+2. `public/api/config.sample.php` als `config.php` kopieren und SMTP-Zugang, Empfänger und einen
+   Zufallswert für `geheimnis` eintragen (`php -r "echo bin2hex(random_bytes(32));"`).
+3. `config.php` wird nicht ins Repository übernommen. Nach dem Build per SFTP nach `/api/` hochladen.
+4. Einmal eine Testanfrage senden.
+
+**Optionen ändern:** Projektarten, Leistungen, Budgetrahmen, Upload-Grenzen und Spamschutz-Werte stehen in
+`public/api/optionen.json`, die Formular und Server gemeinsam nutzen. Texte stehen in `src/i18n/anfrage.ts`.
+
+**Was passiert beim Absenden:**
+
+- Prüfung im Browser (sofortiges Feedback) und noch einmal auf dem Server.
+- Spamschutz ohne Drittanbieter: unsichtbares Honigtopf-Feld, signiertes Token mit Mindestbearbeitungszeit
+  (5 s) und Ablauf (3 h), höchstens 5 Anfragen pro Stunde und IP (nur als gehashter Wert, 1 h gespeichert),
+  höchstens drei Links in der Beschreibung.
+- Uploads: bis 5 Dateien, je 10 MB, zusammen 20 MB; Endung *und* tatsächlicher Dateityp werden geprüft.
+- Mail an Bildmechaniker mit allen Angaben und Anhängen, „Antworten“ geht direkt an den Interessenten.
+- Eingangsbestätigung an den Interessenten mit Referenznummer und dem deutlichen Hinweis, dass dies noch keine
+  Buchung ist. Sie enthält bewusst keinen Freitext aus dem Formular, damit niemand das Formular nutzen kann,
+  um Dritten Nachrichten zu schicken.
+- Nichts wird dauerhaft auf dem Server gespeichert.
