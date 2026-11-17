@@ -3,9 +3,21 @@ import { execFileSync } from 'node:child_process';
 import { mkdirSync, statSync } from 'node:fs';
 import { dirname } from 'node:path';
 
+/**
+ * Datenschutz: Handyvideos enthalten den genauen GPS-Ort, Gerät und Aufnahmezeit.
+ * Vor der Ausgabedatei werden deshalb immer alle Metadaten und Zusatzspuren verworfen
+ * und nur Bild (und ggf. Ton) übernommen.
+ */
+const ohneMetadaten = (args) => {
+  const out = args.at(-1);
+  const mitTon = !args.includes('-an') && !args.includes('-frames:v');
+  const karte = args.includes('-frames:v') ? ['-map', '0:v:0'] : ['-map', '0:v:0', ...(mitTon ? ['-map', '0:a:0?'] : [])];
+  return [...args.slice(0, -1), ...karte, '-map_metadata', '-1', '-map_chapters', '-1', '-metadata', 'creation_time=', out];
+};
+
 const ff = (args) => {
   mkdirSync(dirname(args.at(-1)), { recursive: true });
-  execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', ...args], { stdio: 'inherit' });
+  execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', ...ohneMetadaten(args)], { stdio: 'inherit' });
   const kb = Math.round(statSync(args.at(-1)).size / 1024);
   console.log(`  ✓ ${args.at(-1)} (${kb} KB)`);
 };
