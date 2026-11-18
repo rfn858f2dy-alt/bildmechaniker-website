@@ -50,6 +50,13 @@ export function initAnfrage(root: HTMLElement) {
     anz.hidden = false;
   }
 
+  /* ---------- Vorauswahl einer Leistung von der Leistungsseite (?leistung=…) ---------- */
+  const leistung = new URLSearchParams(location.search).get('leistung');
+  if (leistung) {
+    const box = $$<HTMLInputElement>('[name="leistungen[]"]').find((i) => i.value === leistung);
+    if (box) box.checked = true;
+  }
+
   /* ---------- Kleinigkeiten ---------- */
   const von = $<HTMLInputElement>('#f-von');
   const bis = $<HTMLInputElement>('#f-bis');

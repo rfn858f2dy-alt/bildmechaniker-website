@@ -1,0 +1,257 @@
+---
+import { Picture } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { leistungen, equipment } from '../data/leistungen';
+import fx9Detail from '../assets/symbolbilder/fx9-detail.jpg';
+import { routes, tx, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const de = lang === 'de';
+const T = {
+  titel: de ? 'Leistungen' : 'Services',
+  intro: de
+    ? 'Ein kleines festes Team, für größere Produktionen erweitert um ein eingespieltes Netzwerk. Wir bringen Kamera, Technik und Erfahrung dorthin, wo es zählt.'
+    : 'A small core team, expanded by a well-rehearsed network for larger productions. We bring camera, kit and experience wherever it counts.',
+  einsatz: de ? 'Typische Einsätze' : 'Typical work',
+  anfragen: de ? 'Anfragen' : 'Enquire',
+  equipment: de ? 'Equipment' : 'Equipment',
+  equipmentText: de
+    ? 'Eigene Technik, gepflegt und einsatzbereit. Weitere Geräte stellen wir je nach Produktion zusammen.'
+    : 'Our own kit, maintained and ready to go. Additional equipment is put together per production.',
+  sprung: de ? 'Direkt zu' : 'Jump to',
+};
+---
+
+<Base lang={lang} title={`${T.titel} – Bildmechaniker`} description={T.intro} alternate={routes.leistungen}>
+  <div class="wrap">
+    <header class="intro">
+      <p class="eyebrow">Bildmechaniker</p>
+      <h1>{T.titel}</h1>
+      <p class="lead">{T.intro}</p>
+      <nav class="sprung" aria-label={T.sprung}>
+        <ul>
+          {leistungen.map((l) => <li><a href={`#${l.key}`}>{tx(l.titel, lang)}</a></li>)}
+          <li><a href="#equipment">{T.equipment}</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <ol class="liste">
+      {
+        leistungen.map((l, i) => (
+          <li class:list={['leistung', 'reveal', { gespiegelt: i % 2 === 1 }]} id={l.key}>
+            <div class="bild">
+              <Picture
+                src={l.bild}
+                alt={tx(l.bildAlt, lang)}
+                formats={['avif', 'webp']}
+                widths={[480, 800, 1200, 1600]}
+                sizes="(min-width: 900px) 50vw, 100vw"
+                loading={i < 1 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+            </div>
+            <div class="text">
+              <p class="nr" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
+              <h2>{tx(l.titel, lang)}</h2>
+              <p>{tx(l.text, lang)}</p>
+              <p class="einsatz-titel">{T.einsatz}</p>
+              <ul class="einsaetze">
+                {l.einsaetze[lang].map((e) => <li>{e}</li>)}
+              </ul>
+              <a class="btn" href={`${routes.kontakt[lang]}?leistung=${l.key}`}>
+                {T.anfragen} <span class="visually-hidden">: {tx(l.titel, lang)}</span> <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <section class="equipment reveal" id="equipment" aria-labelledby="eq-titel">
+      <div class="eq-bild">
+        <Picture
+          src={fx9Detail}
+          alt={de ? 'Sony FX9 im Detail mit Bildmechaniker-Aufkleber' : 'Close-up of a Sony FX9 with a Bildmechaniker sticker'}
+          formats={['avif', 'webp']}
+          widths={[400, 700, 1000]}
+          sizes="(min-width: 900px) 33vw, 100vw"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <div>
+        <h2 id="eq-titel">{T.equipment}</h2>
+        <p class="lead">{T.equipmentText}</p>
+        <dl>
+          {
+            equipment[lang].map(([name, text]) => (
+              <div>
+                <dt>{name}</dt>
+                <dd>{text}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .intro {
+    padding: clamp(3rem, 8vw, 6rem) 0 clamp(2rem, 5vw, 4rem);
+    max-width: 56rem;
+  }
+  h1 {
+    font-size: var(--fs-h1);
+    margin: 0.75rem 0 1.25rem;
+  }
+  .lead {
+    color: rgb(237 238 239 / 0.82);
+    font-size: clamp(1.05rem, 1rem + 0.35vw, 1.25rem);
+    margin: 0;
+  }
+  .sprung ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 2rem 0 0;
+  }
+  .sprung a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .sprung a:hover {
+    color: var(--text);
+    border-color: var(--muted);
+  }
+  .liste {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: clamp(3.5rem, 8vw, 7rem);
+  }
+  .leistung {
+    display: grid;
+    gap: 1.75rem;
+    align-items: center;
+    scroll-margin-top: calc(var(--header-h) + 1rem);
+  }
+  @media (min-width: 900px) {
+    .leistung {
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 6vw, 6rem);
+    }
+    .leistung.gespiegelt .bild {
+      order: 2;
+    }
+  }
+  .bild :global(img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    background: var(--surface);
+    border-radius: var(--radius);
+  }
+  .nr {
+    margin: 0;
+    font-size: var(--fs-meta);
+    letter-spacing: 0.14em;
+    color: var(--accent);
+  }
+  .text h2 {
+    font-size: var(--fs-h2);
+    margin: 0.5rem 0 1rem;
+  }
+  .text > p {
+    color: rgb(237 238 239 / 0.85);
+    max-width: 36rem;
+  }
+  .einsatz-titel {
+    margin: 1.5rem 0 0.6rem;
+    font-size: var(--fs-meta);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted) !important;
+  }
+  .einsaetze {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding: 0;
+    margin: 0 0 1.75rem;
+  }
+  .einsaetze li {
+    padding: 0.25rem 0.75rem;
+    background: var(--surface);
+    border-radius: 999px;
+    font-size: 0.9rem;
+  }
+  .equipment {
+    margin-top: clamp(5rem, 10vw, 8rem);
+    padding-top: clamp(3rem, 6vw, 5rem);
+    border-top: 1px solid var(--line);
+    display: grid;
+    gap: 2.5rem;
+    scroll-margin-top: calc(var(--header-h) + 1rem);
+  }
+  @media (min-width: 900px) {
+    .equipment {
+      grid-template-columns: 1fr 2fr;
+      gap: 5rem;
+      align-items: start;
+    }
+  }
+  .eq-bild :global(img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    object-position: center 75%;
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .equipment h2 {
+    font-size: var(--fs-h2);
+    margin-bottom: 1rem;
+  }
+  .equipment dl {
+    margin: 2rem 0 0;
+    border-top: 1px solid var(--line);
+  }
+  .equipment dl div {
+    display: grid;
+    gap: 0.25rem 2rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  @media (min-width: 640px) {
+    .equipment dl div {
+      grid-template-columns: 12rem 1fr;
+    }
+  }
+  .equipment dt {
+    font-weight: 450;
+  }
+  .equipment dd {
+    margin: 0;
+    color: var(--muted);
+  }
+</style>
