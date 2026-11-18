@@ -14,7 +14,7 @@ beschreibung:
     Almost two decades of DTM: from 2004 to 2022 we operated the wireless pit-lane camera at every race weekend – in the pit lane, on the grid and at the podium.
 
     From the Lausitzring to Monza, the Norisring and the Red Bull Ring: we were where things get tight and fast.
-auftraggeber: "DTM"
+auftraggeber: "TV Skyline"
 jahr: "2004 – 2022"
 rolle:
   de: ["Drahtlose Boxenkamera"]
