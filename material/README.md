@@ -13,5 +13,13 @@ Alle Dateien sind ohne Metadaten (kein GPS-Ort, kein Gerät).
 | `unzugeordnet/qualifiers-windsor-park-gimbal.jpg` | Gimbal am Spielfeldrand, Windsor Park Belfast, Aufwärmen | Länderspiel-Projekt (mit Qualifiers-Foto) |
 | `unzugeordnet/bundesliga-sinsheim-mittellinie.jpg` | Mittellinie in Sinsheim, Schuhe im Bild | Bundesliga-Projekt? |
 | `unzugeordnet/oktagon-mma-arena.jpg` | Oktagon MMA, Arena mit Lichtshow | Neues Projekt Kampfsport? |
-| `unzugeordnet/equipment-fx9-bildmechaniker.jpg`, `equipment-fx9-detail.jpg` | Sony FX9 mit Bildmechaniker-Aufklebern | Für die Seite Leistungen/Equipment |
 | `unzugeordnet/winter-cortina-kapelle.jpg` | Verschneite Kapelle vor Dolomiten (Cortina?) | Bob & Skeleton? |
+
+## Symbolbilder
+
+Keiner Produktion zugeordnet. Für Leistungen, Equipment, Über uns und allgemeine Flächen.
+
+| Datei | Inhalt | Einsatz |
+|---|---|---|
+| `symbolbilder/fx9-bildmechaniker.jpg` | Sony FX9 mit Bildmechaniker-Aufklebern auf Schulter-Rig, Stadionlicht | Leistungen (Kameraführung), Equipment |
+| `symbolbilder/fx9-detail.jpg` | FX9-Detail mit Bildmechaniker-Aufkleber, Hochformat | Equipment, mobile Ansicht |
