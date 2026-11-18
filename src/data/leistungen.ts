@@ -12,7 +12,6 @@ import assistenz from '../assets/projekte/nfl-europa/set-4.jpg';
 import produktion from '../assets/projekte/champions-league/set-3.jpg';
 import social from '../assets/projekte/champions-league/set-8.jpg';
 import reels from '../assets/projekte/champions-league/set-7.jpg';
-import ugc from '../assets/projekte/nations-league/set-2.jpg';
 import event from '../assets/projekte/nfl-europa/set-6.jpg';
 
 type T = { de: string; en: string };
@@ -105,17 +104,6 @@ export const leistungen: Leistung[] = [
     einsaetze: { de: ['Instagram Reels', 'TikTok', 'YouTube Shorts'], en: ['Instagram Reels', 'TikTok', 'YouTube Shorts'] },
     bild: reels,
     bildAlt: { de: 'Eckfahne im Signal Iduna Park bei Flutlicht', en: 'Corner flag at Signal Iduna Park under floodlights' },
-  },
-  {
-    key: 'ugc',
-    titel: { de: 'UGC-Produktionen', en: 'UGC productions' },
-    text: {
-      de: 'Videos im authentischen Stil von „User Generated Content“ – nahbar, im Hochformat und direkt in die Kamera, für Marken und Social Ads.',
-      en: 'Videos in the authentic style of user generated content – personal, vertical and straight to camera, for brands and social ads.',
-    },
-    einsaetze: { de: ['Social Ads', 'Produktvorstellungen', 'Testimonials'], en: ['Social ads', 'Product showcases', 'Testimonials'] },
-    bild: ugc,
-    bildAlt: { de: 'Gut gelaunt am Spielfeldrand mit der Kamera', en: 'In good spirits on the touchline with the camera' },
   },
   {
     key: 'event',

@@ -1,38 +1,121 @@
 {
   "projektarten": {
-    "tv": { "de": "TV-Produktion", "en": "TV production" },
-    "sport": { "de": "Sport / Live-Übertragung", "en": "Sports / live broadcast" },
-    "werbung": { "de": "Werbe- oder Imagefilm", "en": "Commercial or corporate film" },
-    "event": { "de": "Event, Messe oder Konzert", "en": "Event, trade fair or concert" },
-    "doku": { "de": "Dokumentation oder Reportage", "en": "Documentary or feature" },
-    "social": { "de": "Social Media / Online", "en": "Social media / online" },
-    "kunst": { "de": "Kunst, Kultur oder Ausstellung", "en": "Art, culture or exhibition" },
-    "sonstiges": { "de": "Etwas anderes", "en": "Something else" }
+    "tv": {
+      "de": "TV-Produktion",
+      "en": "TV production"
+    },
+    "sport": {
+      "de": "Sport / Live-Übertragung",
+      "en": "Sports / live broadcast"
+    },
+    "werbung": {
+      "de": "Werbe- oder Imagefilm",
+      "en": "Commercial or corporate film"
+    },
+    "event": {
+      "de": "Event, Messe oder Konzert",
+      "en": "Event, trade fair or concert"
+    },
+    "doku": {
+      "de": "Dokumentation oder Reportage",
+      "en": "Documentary or feature"
+    },
+    "social": {
+      "de": "Social Media / Online",
+      "en": "Social media / online"
+    },
+    "kunst": {
+      "de": "Kunst, Kultur oder Ausstellung",
+      "en": "Art, culture or exhibition"
+    },
+    "sonstiges": {
+      "de": "Etwas anderes",
+      "en": "Something else"
+    }
   },
   "leistungen": {
-    "mobile-kamera": { "de": "Mobile Kamera & Live-Bildfunk", "en": "Mobile camera & live wireless video" },
-    "dop": { "de": "Bildgestaltung (DOP)", "en": "Cinematography (DOP)" },
-    "kamerafuehrung": { "de": "Kameraführung", "en": "Camera operation" },
-    "kameraassistenz": { "de": "Kameraassistenz", "en": "Camera assistance" },
-    "videoproduktion": { "de": "Videoproduktion", "en": "Video production" },
-    "social": { "de": "Social Media Content", "en": "Social media content" },
-    "reels": { "de": "Reels und Kurzvideos", "en": "Reels and short-form video" },
-    "ugc": { "de": "UGC-Produktionen", "en": "UGC productions" },
-    "event": { "de": "Event- und Dokumentationsproduktionen", "en": "Event and documentary productions" }
+    "mobile-kamera": {
+      "de": "Mobile Kamera & Live-Bildfunk",
+      "en": "Mobile camera & live wireless video"
+    },
+    "dop": {
+      "de": "Bildgestaltung (DOP)",
+      "en": "Cinematography (DOP)"
+    },
+    "kamerafuehrung": {
+      "de": "Kameraführung",
+      "en": "Camera operation"
+    },
+    "kameraassistenz": {
+      "de": "Kameraassistenz",
+      "en": "Camera assistance"
+    },
+    "videoproduktion": {
+      "de": "Videoproduktion",
+      "en": "Video production"
+    },
+    "social": {
+      "de": "Social Media Content",
+      "en": "Social media content"
+    },
+    "reels": {
+      "de": "Reels und Kurzvideos",
+      "en": "Reels and short-form video"
+    },
+    "event": {
+      "de": "Event- und Dokumentationsproduktionen",
+      "en": "Event and documentary productions"
+    }
   },
   "budget": {
-    "bis-2500": { "de": "bis 2.500 €", "en": "up to €2,500" },
-    "2500-5000": { "de": "2.500 – 5.000 €", "en": "€2,500 – 5,000" },
-    "5000-10000": { "de": "5.000 – 10.000 €", "en": "€5,000 – 10,000" },
-    "10000-25000": { "de": "10.000 – 25.000 €", "en": "€10,000 – 25,000" },
-    "ueber-25000": { "de": "über 25.000 €", "en": "over €25,000" },
-    "offen": { "de": "Noch offen – wir beraten gern", "en": "Not sure yet – happy to advise" }
+    "bis-2500": {
+      "de": "bis 2.500 €",
+      "en": "up to €2,500"
+    },
+    "2500-5000": {
+      "de": "2.500 – 5.000 €",
+      "en": "€2,500 – 5,000"
+    },
+    "5000-10000": {
+      "de": "5.000 – 10.000 €",
+      "en": "€5,000 – 10,000"
+    },
+    "10000-25000": {
+      "de": "10.000 – 25.000 €",
+      "en": "€10,000 – 25,000"
+    },
+    "ueber-25000": {
+      "de": "über 25.000 €",
+      "en": "over €25,000"
+    },
+    "offen": {
+      "de": "Noch offen – wir beraten gern",
+      "en": "Not sure yet – happy to advise"
+    }
   },
   "upload": {
     "maxDateien": 5,
     "maxMB": 10,
     "maxGesamtMB": 20,
-    "endungen": ["pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "key", "pages", "odt", "txt", "jpg", "jpeg", "png", "webp", "heic", "zip"]
+    "endungen": [
+      "pdf",
+      "doc",
+      "docx",
+      "xls",
+      "xlsx",
+      "ppt",
+      "pptx",
+      "key",
+      "pages",
+      "odt",
+      "txt",
+      "jpg",
+      "jpeg",
+      "png",
+      "webp",
+      "heic",
+      "zip"
+    ]
   },
   "grenzen": {
     "beschreibungMin": 20,

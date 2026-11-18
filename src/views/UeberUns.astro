@@ -1,0 +1,342 @@
+---
+/**
+ * Über uns. Texte stehen direkt hier (DE/EN), Bilder kommen aus Projekten und Symbolbildern.
+ */
+import { Picture } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import portraet from '../assets/projekte/nfl-europa/set-7.jpg';
+import setRoland from '../assets/projekte/nations-league/set-2.jpg';
+import fx9 from '../assets/symbolbilder/fx9-bildmechaniker.jpg';
+import stadion from '../assets/projekte/champions-league/set-1.jpg';
+import gimbal from '../assets/projekte/nfl-europa/poster.jpg';
+import feld from '../assets/projekte/bauer-sucht-frau/poster.jpg';
+import { routes, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const de = lang === 'de';
+
+const T = de
+  ? {
+      titel: 'Über uns',
+      claim: 'Nah dran. Seit vielen Jahren.',
+      intro: [
+        'Die Bildmechaniker GmbH aus Langenfeld steht für Bilder, die mitten im Geschehen entstehen: am Spielfeldrand, in der Boxengasse, im Studio und auf dem Hof.',
+        'Wir sind ein kleines festes Team und arbeiten für größere Produktionen mit einem eingespielten Netzwerk aus freien Kameraleuten, Assistenz und Technik. So bleiben wir beweglich und können trotzdem jede Größe abdecken.',
+      ],
+      portraetAlt: 'Roland Possler mit Schulterkamera beim NFL Madrid Game',
+      portraetName: 'Roland Possler',
+      portraetRolle: 'Geschäftsführer und Kameramann',
+      werteTitel: 'Wie wir arbeiten',
+      werte: [
+        ['Nah dran', 'Mobile Kamera und Funk bringen uns dorthin, wo große Systeme nicht hinkommen – ohne den Ablauf zu stören.'],
+        ['Verlässlich', 'Live-Sport verzeiht keine zweite Chance. Wir sind vorbereitet, pünktlich und ruhig, wenn es zählt.'],
+        ['Eingespielt', 'Fester Kern, bewährtes Netzwerk: Für jede Produktion stellen wir das passende Team zusammen.'],
+      ],
+      stationenTitel: 'Stationen',
+      stationen: [
+        ['TV-Unterhaltung', '„Bauer sucht Frau“ (RTL) seit der ersten Staffel – zuerst an der Kamera, heute als DOP für Scheunenfest und „Das große Wiedersehen“.'],
+        ['Kunst und Kultur', 'Bildgestaltung für die Bundeskunsthalle Bonn seit fast zwei Jahrzehnten.'],
+        ['Fußball live', 'Mobile Kamera und Live-Bildfunk für Prime Video, RTL, Magenta TV und DAZN – bis hin zum Champions-League-Finale.'],
+        ['International', 'NFL-Spiele in Europa, Formel 1, 24h Nürburgring und Bob & Skeleton bei IBSF-Wettkämpfen.'],
+      ],
+      galerieTitel: 'Unterwegs',
+      cta: 'Lust auf ein gemeinsames Projekt?',
+      ctaBtn: 'Projekt anfragen',
+      ctaLink: 'Produktionen ansehen',
+    }
+  : {
+      titel: 'About us',
+      claim: 'Up close. For many years.',
+      intro: [
+        'Bildmechaniker GmbH from Langenfeld, Germany, stands for pictures captured right in the middle of the action: on the touchline, in the pit lane, in the studio and out on the farm.',
+        'We are a small core team and, for larger productions, work with a well-rehearsed network of freelance camera operators, assistants and engineers. That keeps us agile while covering productions of any size.',
+      ],
+      portraetAlt: 'Roland Possler with a shoulder camera at the NFL Madrid Game',
+      portraetName: 'Roland Possler',
+      portraetRolle: 'Managing director and camera operator',
+      werteTitel: 'How we work',
+      werte: [
+        ['Up close', 'Mobile cameras and wireless links take us where large systems cannot go – without disrupting the flow.'],
+        ['Reliable', 'Live sport gives no second chances. We are prepared, on time and calm when it counts.'],
+        ['Well-rehearsed', 'A solid core and a proven network: we put together the right crew for every production.'],
+      ],
+      stationenTitel: 'Milestones',
+      stationen: [
+        ['TV entertainment', '“Bauer sucht Frau” (RTL) since its first season – first behind the camera, today as DOP for the barn party and the reunion special.'],
+        ['Art and culture', 'Cinematography for the Bundeskunsthalle in Bonn for almost two decades.'],
+        ['Live football', 'Mobile camera and live wireless video for Prime Video, RTL, Magenta TV and DAZN – all the way to the Champions League final.'],
+        ['International', 'NFL games in Europe, Formula 1, the 24h Nürburgring and bobsleigh & skeleton at IBSF events.'],
+      ],
+      galerieTitel: 'On the road',
+      cta: 'Fancy working together?',
+      ctaBtn: 'Request a production',
+      ctaLink: 'View productions',
+    };
+
+const galerie = [
+  { src: stadion, alt: de ? 'FX6 mit Funkmonitor am Spielfeldrand' : 'FX6 with wireless monitor on the touchline' },
+  { src: gimbal, alt: de ? 'Gimbal-Kamera am Spielfeldrand eines NFL-Spiels' : 'Gimbal camera on the sideline of an NFL game' },
+  { src: feld, alt: de ? 'Luftaufnahme: Herz im Feld' : 'Aerial shot: heart in a field' },
+  { src: fx9, alt: de ? 'Sony FX9 der Bildmechaniker' : 'Bildmechaniker Sony FX9' },
+];
+---
+
+<Base lang={lang} title={`${T.titel} – Bildmechaniker`} description={T.intro[0]} alternate={routes.ueber}>
+  <div class="wrap">
+    <section class="kopf">
+      <div class="text">
+        <p class="eyebrow">{T.titel}</p>
+        <h1>{T.claim}</h1>
+        {T.intro.map((p) => <p class="lead">{p}</p>)}
+      </div>
+      <figure class="portraet">
+        <Picture
+          src={portraet}
+          alt={T.portraetAlt}
+          formats={['avif', 'webp']}
+          widths={[400, 700, 1000]}
+          sizes="(min-width: 900px) 40vw, 100vw"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+        <figcaption><strong>{T.portraetName}</strong><span>{T.portraetRolle}</span></figcaption>
+      </figure>
+    </section>
+
+    <section class="werte reveal" aria-labelledby="werte-titel">
+      <h2 id="werte-titel" class="abschnitt">{T.werteTitel}</h2>
+      <ul>
+        {
+          T.werte.map(([titel, text], i) => (
+            <li>
+              <span class="nr" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{titel}</h3>
+              <p>{text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="stationen reveal" aria-labelledby="stationen-titel">
+      <div class="stationen-bild">
+        <Picture
+          src={setRoland}
+          alt={de ? 'Mit der mobilen Kamera am Spielfeldrand' : 'With the mobile camera on the touchline'}
+          formats={['avif', 'webp']}
+          widths={[400, 700, 1000]}
+          sizes="(min-width: 900px) 33vw, 100vw"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <div>
+        <h2 id="stationen-titel" class="abschnitt">{T.stationenTitel}</h2>
+        <ol>
+          {
+            T.stationen.map(([titel, text]) => (
+              <li>
+                <h3>{titel}</h3>
+                <p>{text}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <section class="galerie reveal" aria-labelledby="galerie-titel">
+      <h2 id="galerie-titel" class="abschnitt">{T.galerieTitel}</h2>
+      <ul>
+        {
+          galerie.map((g) => (
+            <li>
+              <Picture src={g.src} alt={g.alt} formats={['avif', 'webp']} widths={[400, 700, 1000]} sizes="(min-width: 900px) 25vw, 50vw" loading="lazy" decoding="async" />
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="cta reveal">
+      <h2>{T.cta}</h2>
+      <div>
+        <a class="btn btn--primary" href={routes.kontakt[lang]}>{T.ctaBtn}</a>
+        <a class="btn" href={routes.produktionen[lang]}>{T.ctaLink}</a>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .kopf {
+    display: grid;
+    gap: 2.5rem;
+    padding: clamp(3rem, 8vw, 6rem) 0 clamp(3rem, 6vw, 5rem);
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .kopf {
+      grid-template-columns: 3fr 2fr;
+      gap: clamp(3rem, 6vw, 6rem);
+    }
+  }
+  h1 {
+    font-size: var(--fs-h1);
+    margin: 0.75rem 0 1.5rem;
+    max-width: 14ch;
+  }
+  .lead {
+    color: rgb(237 238 239 / 0.85);
+    font-size: clamp(1.05rem, 1rem + 0.35vw, 1.25rem);
+    margin: 0 0 1rem;
+    max-width: 40rem;
+  }
+  .portraet {
+    margin: 0;
+  }
+  .portraet :global(img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: center 30%;
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  figcaption {
+    display: grid;
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+  }
+  figcaption strong {
+    font-weight: 450;
+  }
+  figcaption span {
+    color: var(--muted);
+    font-size: var(--fs-meta);
+  }
+  .abschnitt {
+    font-size: var(--fs-meta);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    font-weight: 450;
+    margin-bottom: 2rem;
+  }
+  section + section {
+    margin-top: clamp(4rem, 9vw, 7rem);
+  }
+  .werte ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 2.5rem;
+  }
+  @media (min-width: 800px) {
+    .werte ul {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .werte li {
+    border-top: 1px solid var(--line);
+    padding-top: 1.5rem;
+  }
+  .nr {
+    font-size: var(--fs-meta);
+    letter-spacing: 0.14em;
+    color: var(--accent);
+  }
+  .werte h3,
+  .stationen h3 {
+    font-size: var(--fs-h3);
+    margin: 0.5rem 0 0.6rem;
+  }
+  .werte p,
+  .stationen p {
+    color: rgb(237 238 239 / 0.8);
+    margin: 0;
+  }
+  .stationen {
+    display: grid;
+    gap: 2.5rem;
+  }
+  @media (min-width: 900px) {
+    .stationen {
+      grid-template-columns: 1fr 2fr;
+      gap: 5rem;
+      align-items: start;
+    }
+  }
+  .stationen-bild :global(img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .stationen ol {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 1.5rem;
+    border-left: 1px solid var(--line);
+    display: grid;
+    gap: 2rem;
+  }
+  .stationen li {
+    position: relative;
+  }
+  .stationen li::before {
+    content: '';
+    position: absolute;
+    left: calc(-1.5rem - 4.5px);
+    top: 0.55rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .stationen li h3 {
+    margin-top: 0;
+  }
+  .galerie ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3px;
+  }
+  @media (min-width: 900px) {
+    .galerie ul {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .galerie :global(img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    background: var(--surface);
+  }
+  .cta {
+    border-top: 1px solid var(--line);
+    padding-top: clamp(3rem, 6vw, 5rem);
+    display: grid;
+    gap: 1.5rem;
+  }
+  .cta h2 {
+    font-size: var(--fs-h2);
+  }
+  .cta div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+</style>
