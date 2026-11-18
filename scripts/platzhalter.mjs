@@ -37,7 +37,7 @@ const projekte = [
   ['matchday-1-show', 'MATCHDAY-1-SHOW', '0x1b1033', '0x6b4fd8'],
   ['bauer-sucht-frau', 'BAUER SUCHT FRAU', '0x2a1d0b', '0xd8902e', { film: true, galerie: 3 }],
   ['nations-league', 'NATIONS LEAGUE', '0x0b2a1d', '0x2ed88a'],
-  ['nfl-europa', 'NFL IN EUROPA', '0x2a0b0b', '0xd83a2e'],
+  ['nfl', 'NFL', '0x2a0b0b', '0xd83a2e'],
   ['baller-league', 'BALLER LEAGUE', '0x101010', '0xb8e32e'],
   ['24h-nuerburgring', '24H NÜRBURGRING', '0x1d1d1d', '0xe3c22e'],
   ['ibsf-bob-skeleton', 'BOB & SKELETON', '0x0b1d2a', '0xbfe4ff'],

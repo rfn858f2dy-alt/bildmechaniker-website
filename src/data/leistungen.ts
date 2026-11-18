@@ -8,11 +8,11 @@ import type { ImageMetadata } from 'astro';
 import mobile from '../assets/projekte/champions-league/set-9.jpg';
 import dop from '../assets/projekte/bauer-sucht-frau/poster.jpg';
 import kamera from '../assets/symbolbilder/fx9-bildmechaniker.jpg';
-import assistenz from '../assets/projekte/nfl-europa/set-4.jpg';
+import assistenz from '../assets/projekte/nfl/set-4.jpg';
 import produktion from '../assets/projekte/champions-league/set-3.jpg';
 import social from '../assets/projekte/champions-league/set-8.jpg';
 import reels from '../assets/projekte/champions-league/set-7.jpg';
-import event from '../assets/projekte/nfl-europa/set-6.jpg';
+import event from '../assets/projekte/nfl/set-6.jpg';
 
 type T = { de: string; en: string };
 export type Leistung = {

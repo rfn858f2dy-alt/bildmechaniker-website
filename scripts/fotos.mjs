@@ -2,8 +2,8 @@
 /**
  * Fotos vom Set in ein Projekt übernehmen.
  *
- *   npm run fotos -- --projekt nfl-europa  fotos/IMG_1.HEIC fotos/IMG_2.jpg
- *   npm run fotos -- --projekt nfl-europa --poster fotos/IMG_3.jpg
+ *   npm run fotos -- --projekt nfl  fotos/IMG_1.HEIC fotos/IMG_2.jpg
+ *   npm run fotos -- --projekt nfl --poster fotos/IMG_3.jpg
  *   npm run fotos -- --showreel-poster fotos/stadion.HEIC
  *
  * Was passiert:
