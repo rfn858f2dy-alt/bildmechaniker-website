@@ -7,9 +7,9 @@ kurz:
   en: "NFL games in Europe, close to the teams and the fans."
 beschreibung:
   de: |
-    Wenn die NFL in Europa spielt, sind wir für RTL mit der mobilen Kamera dabei.
+    Alle Deutschland-Spiele der NFL haben wir an der Seitenlinie begleitet – mit mobiler Kamera, nah an Teams und Fans. 2026 folgte der erste Super Bowl im Levi’s Stadium in San Francisco.
   en: |
-    When the NFL plays in Europe, we are on site for RTL with our mobile camera.
+    We have covered every NFL game in Germany on the sideline – with a mobile camera, close to the teams and the fans. In 2026 came our first Super Bowl, at Levi’s Stadium in San Francisco.
 auftraggeber: "RTL"
 jahr: 2026
 rolle:

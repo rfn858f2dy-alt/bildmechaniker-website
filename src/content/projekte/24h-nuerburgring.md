@@ -7,9 +7,9 @@ kurz:
   en: "24 hours of motorsport on the Nordschleife."
 beschreibung:
   de: |
-    Beim 24-Stunden-Rennen auf dem Nürburgring sind wir mit der Kamera im Einsatz.
+    Das 24-Stunden-Rennen auf dem Nürburgring begleiten wir seit vielen Jahren mit der Kamera.
   en: |
-    We operate camera at the 24 Hours Nürburgring endurance race.
+    We have covered the 24 Hours Nürburgring with our cameras for many years.
 auftraggeber: "Motorsport"
 # jahr: 2025   ← Produktionsjahr eintragen
 rolle:

@@ -4,7 +4,7 @@
  */
 import { Picture } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import portraet from '../assets/projekte/nfl-europa/set-7.jpg';
+import portraet from '../assets/projekte/champions-league/set-2.jpg';
 import setRoland from '../assets/projekte/nations-league/set-2.jpg';
 import fx9 from '../assets/symbolbilder/fx9-bildmechaniker.jpg';
 import stadion from '../assets/projekte/champions-league/set-1.jpg';
@@ -21,26 +21,31 @@ const de = lang === 'de';
 const T = de
   ? {
       titel: 'Über uns',
-      claim: 'Nah dran. Seit vielen Jahren.',
+      claim: 'Nah dran. Seit 1996.',
       intro: [
-        'Die Bildmechaniker GmbH aus Langenfeld steht für Bilder, die mitten im Geschehen entstehen: am Spielfeldrand, in der Boxengasse, im Studio und auf dem Hof.',
-        'Wir sind ein kleines festes Team und arbeiten für größere Produktionen mit einem eingespielten Netzwerk aus freien Kameraleuten, Assistenz und Technik. So bleiben wir beweglich und können trotzdem jede Größe abdecken.',
+        'Hinter der Bildmechaniker GmbH aus Langenfeld steht Roland Possler – seit 1996 im internationalen Motorsport, seit 2003 im Live-Fußball und seit 2005 mit eigener Firma selbstständig.',
+        'Für größere Produktionen arbeiten wir mit einem eingespielten Netzwerk aus freien Kameraleuten, Assistenz und Technik. So bleiben wir beweglich und decken trotzdem jede Produktionsgröße ab.',
       ],
-      portraetAlt: 'Roland Possler mit Schulterkamera beim NFL Madrid Game',
+      portraetAlt: 'Roland Possler mit der mobilen Kamera auf dem Gimbal am Spielfeldrand',
       portraetName: 'Roland Possler',
       portraetRolle: 'Geschäftsführer und Kameramann',
       werteTitel: 'Wie wir arbeiten',
       werte: [
         ['Nah dran', 'Mobile Kamera und Funk bringen uns dorthin, wo große Systeme nicht hinkommen – ohne den Ablauf zu stören.'],
         ['Verlässlich', 'Live-Sport verzeiht keine zweite Chance. Wir sind vorbereitet, pünktlich und ruhig, wenn es zählt.'],
-        ['Eingespielt', 'Fester Kern, bewährtes Netzwerk: Für jede Produktion stellen wir das passende Team zusammen.'],
+        ['Eingespielt', 'Ein bewährtes Netzwerk: Für jede Produktion stellen wir das passende Team zusammen.'],
       ],
       stationenTitel: 'Stationen',
       stationen: [
-        ['TV-Unterhaltung', '„Bauer sucht Frau“ (RTL) seit der ersten Staffel – zuerst an der Kamera, heute als DOP für Scheunenfest und „Das große Wiedersehen“.'],
-        ['Kunst und Kultur', 'Bildgestaltung für die Bundeskunsthalle Bonn seit fast zwei Jahrzehnten.'],
-        ['Fußball live', 'Mobile Kamera und Live-Bildfunk für Prime Video, RTL, Magenta TV und DAZN – bis hin zum Champions-League-Finale.'],
-        ['International', 'NFL-Spiele in Europa, Formel 1, 24h Nürburgring und Bob & Skeleton bei IBSF-Wettkämpfen.'],
+        ['1996', 'Einstieg im internationalen Motorsport – bis 2000 als Auszubildender, danach als freier Kameramann.'],
+        ['2003', 'Start im Live-Fußball, heute mit mobiler Kamera und Live-Bildfunk für Prime Video, RTL, Magenta TV und DAZN.'],
+        ['2004 – 2022', 'DTM: durchgehend als Kameramann der drahtlosen Boxenkamera.'],
+        ['2005', 'Gründung der eigenen Firma als Suncity TV GmbH. Seitdem auch bei „Bauer sucht Frau“ (RTL) – von der ersten Staffel an, heute als DOP für Scheunenfest und „Das große Wiedersehen“.'],
+        ['seit 20 Jahren', 'Bildgestaltung für die Bundeskunsthalle Bonn.'],
+        ['2016', 'Aus der Suncity TV GmbH wird die Bildmechaniker GmbH.'],
+        ['seit 4 Jahren', 'IBSF Bob & Skeleton: Handkamera am Start.'],
+        ['NFL', 'Alle Deutschland-Spiele der NFL an der Seitenlinie – und 2026 der erste Super Bowl im Levi’s Stadium in San Francisco.'],
+        ['außerdem', 'Seit vielen Jahren beim 24-Stunden-Rennen auf dem Nürburgring, dazu Einsätze in der Formel 1.'],
       ],
       galerieTitel: 'Unterwegs',
       cta: 'Lust auf ein gemeinsames Projekt?',
@@ -49,26 +54,31 @@ const T = de
     }
   : {
       titel: 'About us',
-      claim: 'Up close. For many years.',
+      claim: 'Up close. Since 1996.',
       intro: [
-        'Bildmechaniker GmbH from Langenfeld, Germany, stands for pictures captured right in the middle of the action: on the touchline, in the pit lane, in the studio and out on the farm.',
-        'We are a small core team and, for larger productions, work with a well-rehearsed network of freelance camera operators, assistants and engineers. That keeps us agile while covering productions of any size.',
+        'Behind Bildmechaniker GmbH from Langenfeld, Germany, is Roland Possler – in international motorsport since 1996, in live football since 2003 and running his own company since 2005.',
+        'For larger productions we work with a well-rehearsed network of freelance camera operators, assistants and engineers. That keeps us agile while covering productions of any size.',
       ],
-      portraetAlt: 'Roland Possler with a shoulder camera at the NFL Madrid Game',
+      portraetAlt: 'Roland Possler with the gimbal-mounted mobile camera on the touchline',
       portraetName: 'Roland Possler',
       portraetRolle: 'Managing director and camera operator',
       werteTitel: 'How we work',
       werte: [
         ['Up close', 'Mobile cameras and wireless links take us where large systems cannot go – without disrupting the flow.'],
         ['Reliable', 'Live sport gives no second chances. We are prepared, on time and calm when it counts.'],
-        ['Well-rehearsed', 'A solid core and a proven network: we put together the right crew for every production.'],
+        ['Well-rehearsed', 'A proven network: we put together the right crew for every production.'],
       ],
       stationenTitel: 'Milestones',
       stationen: [
-        ['TV entertainment', '“Bauer sucht Frau” (RTL) since its first season – first behind the camera, today as DOP for the barn party and the reunion special.'],
-        ['Art and culture', 'Cinematography for the Bundeskunsthalle in Bonn for almost two decades.'],
-        ['Live football', 'Mobile camera and live wireless video for Prime Video, RTL, Magenta TV and DAZN – all the way to the Champions League final.'],
-        ['International', 'NFL games in Europe, Formula 1, the 24h Nürburgring and bobsleigh & skeleton at IBSF events.'],
+        ['1996', 'Start in international motorsport – as a trainee until 2000, then as a freelance camera operator.'],
+        ['2003', 'Start in live football, today with mobile camera and live wireless video for Prime Video, RTL, Magenta TV and DAZN.'],
+        ['2004 – 2022', 'DTM: wireless pit-lane camera operator throughout.'],
+        ['2005', 'Founded the company as Suncity TV GmbH. Also on “Bauer sucht Frau” (RTL) from the very first season – today as DOP for the barn party and the reunion special.'],
+        ['20 years', 'Cinematography for the Bundeskunsthalle in Bonn.'],
+        ['2016', 'Suncity TV GmbH becomes Bildmechaniker GmbH.'],
+        ['4 years', 'IBSF bobsleigh & skeleton: handheld camera at the start.'],
+        ['NFL', 'Every NFL game in Germany on the sideline – and in 2026 the first Super Bowl, at Levi’s Stadium in San Francisco.'],
+        ['also', 'The 24 Hours Nürburgring for many years, plus occasional Formula 1 assignments.'],
       ],
       galerieTitel: 'On the road',
       cta: 'Fancy working together?',
@@ -138,9 +148,9 @@ const galerie = [
         <h2 id="stationen-titel" class="abschnitt">{T.stationenTitel}</h2>
         <ol>
           {
-            T.stationen.map(([titel, text]) => (
+            T.stationen.map(([zeit, text]) => (
               <li>
-                <h3>{titel}</h3>
+                <h3>{zeit}</h3>
                 <p>{text}</p>
               </li>
             ))

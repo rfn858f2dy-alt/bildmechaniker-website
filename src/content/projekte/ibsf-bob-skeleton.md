@@ -7,9 +7,9 @@ kurz:
   en: "Winter sports at IBSF competitions."
 beschreibung:
   de: |
-    Bei Bob- und Skeleton-Wettkämpfen der IBSF sind wir an der Bahn im Einsatz.
+    Seit vier Jahren sind wir bei Bob- und Skeleton-Wettkämpfen der IBSF als Handkamera am Start im Einsatz.
   en: |
-    We work trackside at IBSF bobsleigh and skeleton competitions.
+    For four years we have been working the start area at IBSF bobsleigh and skeleton events with a handheld camera.
 auftraggeber: "IBSF"
 # jahr: 2025   ← Produktionsjahr eintragen
 rolle:
