@@ -18,8 +18,10 @@ const projekte = defineCollection({
       beschreibung: t,
       /** Produktionsjahr, z. B. 2025 oder "seit 2009". Ohne Angabe wird es nicht angezeigt. */
       jahr: z.union([z.number(), z.string()]).optional(),
-      /** Auftraggeber, Sender oder Veranstalter. */
-      auftraggeber: z.string(),
+      /** Auftraggeber (meist die Produktionsfirma). Optional. */
+      auftraggeber: z.string().optional(),
+      /** Sender bzw. Plattform, auf der die Produktion lief. Optional. */
+      sender: z.string().optional(),
       /** Unsere Rolle in dieser Produktion. */
       rolle: z.object({ de: z.array(z.string()), en: z.array(z.string()).optional() }),
       kategorien: z.array(z.enum(KATEGORIEN)).min(1),

@@ -12,7 +12,8 @@ beschreibung:
     Zweiter Absatz.
   en: |
     What was the brief, how did we approach it?
-auftraggeber: bitte ergänzen
+# auftraggeber: "Produktionsfirma ergänzen"
+sender: "RTL"
 jahr: 2026
 rolle:
   de: [Kamera]

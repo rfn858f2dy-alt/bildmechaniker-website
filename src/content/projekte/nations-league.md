@@ -10,7 +10,8 @@ beschreibung:
     Bei den Nations-League-Spielen mit deutscher Beteiligung sind wir für RTL mit der mobilen Kamera im Stadion.
   en: |
     For RTL we cover Nations League matches featuring Germany with our mobile camera inside the stadium.
-auftraggeber: "RTL"
+# auftraggeber: "Produktionsfirma ergänzen"
+sender: "RTL"
 # jahr: 2025   ← Produktionsjahr eintragen
 rolle:
   de: ["Mobile Kamera"]

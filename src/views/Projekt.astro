@@ -23,7 +23,8 @@ const posterGross = await getImage({ src: d.poster, width: 1920, format: 'webp' 
 const hochkant = d.format === '9:16';
 
 const fakten = [
-  { k: t('projekt.auftraggeber'), v: d.auftraggeber },
+  d.auftraggeber ? { k: t('projekt.auftraggeber'), v: d.auftraggeber } : null,
+  d.sender ? { k: t('projekt.sender'), v: d.sender } : null,
   d.jahr ? { k: t('projekt.jahr'), v: String(d.jahr) } : null,
   { k: t('projekt.rolle'), v: txa(d.rolle, lang).join(', ') },
   { k: t('projekt.kategorie'), v: d.kategorien.map((c) => t(`kat.${c}`)).join(', ') },
@@ -92,7 +93,7 @@ const jsonLd = {
     <div class="wrap inhalt">
       <a class="zurueck" href={routes.produktionen[lang]}><span aria-hidden="true">←</span> {t('projekt.zurueck')}</a>
       <header class="kopf">
-        <p class="eyebrow">{d.auftraggeber}{d.jahr && ` · ${d.jahr}`}</p>
+        <p class="eyebrow">{[d.sender ?? d.auftraggeber, d.jahr].filter(Boolean).join(' · ')}</p>
         <h1>{titel}</h1>
         <p class="lead">{tx(d.kurz, lang)}</p>
       </header>

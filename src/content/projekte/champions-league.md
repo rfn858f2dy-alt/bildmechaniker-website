@@ -3,18 +3,19 @@ titel:
   de: "Champions League"
   en: "Champions League"
 kurz:
-  de: "Mobile Kamera ganz nah am Geschehen bei den Dienstagsspielen."
-  en: "A mobile camera right at the heart of the action on Tuesday match nights."
+  de: "Mobile Kamera ganz nah am Geschehen – bis hin zum Finale."
+  en: "A mobile camera right at the heart of the action – all the way to the final."
 beschreibung:
   de: |
-    Bei den Dienstagsspielen der Champions League sind wir mit unserem mobilen Kamerasystem im Einsatz: eine Sony FX6 auf einem Ronin-Gimbal, kombiniert mit einer DTC-Domo-Funkstrecke für Livebild ohne Kabel.
+    In der Champions League sind wir mit unserem mobilen Kamerasystem im Einsatz: eine Sony FX6 auf einem Ronin-Gimbal, kombiniert mit einer DTC-Domo-Funkstrecke für Livebild ohne Kabel.
 
     So entstehen Bilder vom Spielfeldrand, aus dem Tunnel und von der Ankunft der Mannschaften, die mit großen Systemkameras nicht möglich wären.
   en: |
-    On Champions League Tuesday nights we operate our mobile camera system: a Sony FX6 on a Ronin gimbal, paired with a DTC Domo wireless link for cable-free live pictures.
+    In the Champions League we operate our mobile camera system: a Sony FX6 on a Ronin gimbal, paired with a DTC Domo wireless link for cable-free live pictures.
 
     This gives the broadcast shots from the touchline, the tunnel and the team arrivals that large studio cameras cannot capture.
-auftraggeber: "Prime Video"
+auftraggeber: "BMS"
+sender: "DAZN"
 jahr: 2026
 rolle:
   de: ["Mobile Kamera","Live-Bildfunk"]

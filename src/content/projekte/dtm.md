@@ -15,6 +15,7 @@ beschreibung:
 
     From the Lausitzring to Monza, the Norisring and the Red Bull Ring: we were where things get tight and fast.
 auftraggeber: "TV Skyline"
+# sender: "Sender ergänzen"
 jahr: "2004 – 2022"
 rolle:
   de: ["Drahtlose Boxenkamera"]

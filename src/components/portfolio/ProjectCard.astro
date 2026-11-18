@@ -20,7 +20,8 @@ const { projekt, lang, eager = false, gross = false, stufe = 3 } = Astro.props;
 const H = stufe === 2 ? 'h2' : 'h3';
 const d = projekt.data;
 const titel = tx(d.titel, lang);
-const meta = [d.auftraggeber, d.jahr].filter(Boolean).join(' · ');
+// Auf der Kachel steht der bekanntere Name: Sender, sonst Auftraggeber
+const meta = [d.sender ?? d.auftraggeber, d.jahr].filter(Boolean).join(' · ');
 ---
 
 <li class:list={['card', { 'card--gross': gross }]} data-card data-kategorien={d.kategorien.join(' ')}>

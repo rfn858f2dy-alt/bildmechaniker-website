@@ -10,7 +10,8 @@ beschreibung:
     Für die Matchday-1-Show, den Vorbericht zur anstehenden Paarung bei Prime Video, setzen wir die Bilder vor Ort um.
   en: |
     For the Matchday 1 Show, Prime Video’s preview of the upcoming fixture, we capture the on-site footage.
-auftraggeber: "Prime Video"
+# auftraggeber: "Produktionsfirma ergänzen"
+sender: "Prime Video"
 # jahr: 2025   ← Produktionsjahr eintragen
 rolle:
   de: ["Mobile Kamera","Umsetzung Vorbericht"]

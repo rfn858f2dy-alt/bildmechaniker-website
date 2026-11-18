@@ -13,7 +13,7 @@
  *   --standbild     Sekunde für das Standbild (Standard: start + 1)
  *   --film          Längerer Film mit Ton für die Lightbox (optional)
  *   --youtube       Stattdessen eine YouTube-ID (optional)
- *   --titel, --auftraggeber, --jahr, --kategorie (mehrfach möglich), --rolle (mehrfach möglich)
+ *   --titel, --auftraggeber (Produktionsfirma), --sender, --jahr, --kategorie (mehrfach möglich), --rolle (mehrfach möglich)
  */
 import { parseArgs } from 'node:util';
 import { existsSync, writeFileSync, mkdirSync } from 'node:fs';
@@ -30,6 +30,7 @@ const { values: a } = parseArgs({
     youtube: { type: 'string' },
     titel: { type: 'string' },
     auftraggeber: { type: 'string', default: '' },
+    sender: { type: 'string', default: '' },
     jahr: { type: 'string' },
     kategorie: { type: 'string', multiple: true, default: ['sport'] },
     rolle: { type: 'string', multiple: true, default: ['Mobile Kamera'] },
@@ -80,7 +81,8 @@ beschreibung:
     Zweiter Absatz.
   en: |
     What was the brief, how did we approach it?
-auftraggeber: ${a.auftraggeber}
+${a.auftraggeber ? `auftraggeber: "${a.auftraggeber}"` : '# auftraggeber: "Produktionsfirma"'}
+${a.sender ? `sender: "${a.sender}"` : '# sender: "Sender"'}
 ${a.jahr ? `jahr: ${a.jahr}` : '# jahr: 2025'}
 rolle:
   de: [${a.rolle.join(', ')}]

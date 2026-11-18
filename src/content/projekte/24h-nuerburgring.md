@@ -10,7 +10,8 @@ beschreibung:
     Das 24-Stunden-Rennen auf dem Nürburgring begleiten wir seit vielen Jahren mit der Kamera.
   en: |
     We have covered the 24 Hours Nürburgring with our cameras for many years.
-auftraggeber: "Motorsport"
+auftraggeber: "TV Skyline"
+# sender: "Sender ergänzen"
 # jahr: 2025   ← Produktionsjahr eintragen
 rolle:
   de: ["Kamera"]

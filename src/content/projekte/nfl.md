@@ -10,7 +10,8 @@ beschreibung:
     Alle Deutschland-Spiele der NFL haben wir an der Seitenlinie begleitet – mit mobiler Kamera, nah an Teams und Fans. 2026 folgte der erste Super Bowl im Levi’s Stadium in San Francisco.
   en: |
     We have covered every NFL game in Germany on the sideline – with a mobile camera, close to the teams and the fans. In 2026 came our first Super Bowl, at Levi’s Stadium in San Francisco.
-auftraggeber: "RTL"
+# auftraggeber: "Produktionsfirma ergänzen"
+sender: "RTL"
 jahr: 2026
 rolle:
   de: ["Mobile Kamera"]

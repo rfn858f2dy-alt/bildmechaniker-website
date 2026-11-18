@@ -10,7 +10,8 @@ beschreibung:
     „Bauer sucht Frau“ begleiten wir seit der ersten Staffel: zuerst an der Kamera, heute als DOP für das Scheunenfest und „Das große Wiedersehen“.
   en: |
     We have been part of “Bauer sucht Frau” since its first season: first behind the camera, today as director of photography for the barn party and the reunion special “Das große Wiedersehen”.
-auftraggeber: "RTL"
+auftraggeber: "Diverse Produktionsfirmen"
+sender: "RTL"
 # jahr: 2025   ← Produktionsjahr eintragen
 rolle:
   de: ["DOP","Kamera"]
