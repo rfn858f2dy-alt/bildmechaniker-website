@@ -23,3 +23,4 @@ Keiner Produktion zugeordnet. Für Leistungen, Equipment, Über uns und allgemei
 |---|---|---|
 | `symbolbilder/fx9-bildmechaniker.jpg` | Sony FX9 mit Bildmechaniker-Aufklebern auf Schulter-Rig, Stadionlicht | Leistungen (Kameraführung), Equipment |
 | `symbolbilder/fx9-detail.jpg` | FX9-Detail mit Bildmechaniker-Aufkleber, Hochformat | Equipment, mobile Ansicht |
+| `unzugeordnet/adac-gt-masters-startaufstellung.jpg` | ADAC GT Masters, Startaufstellung mit Schulterkamera (Foto vermutlich von Dritten) | Zu DTM? Bildrechte/Personen klären |
